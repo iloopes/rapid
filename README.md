@@ -9,16 +9,16 @@ An AI agent that explains Bluesky posts by searching the web for relevant contex
 ```
 User pastes a Bluesky URL
         ↓
-Backend fetches the post via AT Protocol API
+Backend fetches the post via AT Protocol public API
         ↓
 Agent builds a search query and retrieves web results (DuckDuckGo / Tavily)
         ↓
-Gemini 2.5 Flash synthesizes context into 3–5 bullets + curated sources
+GPT-4o synthesizes context into 3–5 bullets + curated sources
         ↓
 React frontend displays the explanation
 ```
 
-The agent uses a **retrieval-augmented** approach: it never fabricates facts — every bullet is grounded in the retrieved search results. The model also selects which source URLs best support the explanation, rather than listing all results blindly.
+The agent uses a **retrieval-augmented generation (RAG)** approach: every bullet is grounded in retrieved search results. The model also selects which source URLs best support the explanation, rather than listing all results blindly.
 
 ---
 
@@ -26,13 +26,14 @@ The agent uses a **retrieval-augmented** approach: it never fabricates facts —
 
 | Layer | Technology |
 |---|---|
-| LLM | Gemini 2.5 Flash (JSON mode with schema) |
+| LLM | GPT-4o (structured JSON output with strict schema) |
 | Search | DuckDuckGo (free, no key) · Tavily (optional, higher quality) |
 | Post fetching | Bluesky AT Protocol public API |
 | Backend | FastAPI + Pydantic |
 | Frontend | React + Vite + TypeScript + Tailwind + shadcn/ui |
+| Observability | Langfuse (optional, traces every LLM call) |
 | Tests | pytest (backend) · Vitest + React Testing Library (frontend) |
-| Eval | Keyword-matching harness with 12 labeled test cases |
+| Eval | Keyword scoring + LLM-as-judge · 12 labeled real posts |
 
 ---
 
@@ -42,30 +43,43 @@ The agent uses a **retrieval-augmented** approach: it never fabricates facts —
 
 - Python 3.11+
 - Node.js 18+
-- A [Gemini API key](https://aistudio.google.com/apikey) (free tier)
+- An [OpenAI API key](https://platform.openai.com/api-keys)
 
-### Backend
+### 1. Clone and create the virtual environment
 
 ```bash
-cd backend
+git clone https://github.com/iloopes/rapid.git
+cd rapid
 
 python -m venv .venv
 .venv\Scripts\activate        # Windows
 # source .venv/bin/activate   # Mac/Linux
+```
 
+### 2. Backend
+
+```bash
+cd backend
 pip install -r requirements.txt
 
 cp .env.example .env
-# Edit .env and add your GEMINI_API_KEY
-
-uvicorn main:app --reload --port 8001
+# Edit .env and fill in your OPENAI_API_KEY
 ```
 
-### Frontend
+### 3. Frontend
 
 ```bash
 cd frontend
 npm install
+```
+
+### 4. Run
+
+```bash
+# Terminal 1 — backend (from the backend/ folder)
+uvicorn main:app --reload --port 8003
+
+# Terminal 2 — frontend (from the frontend/ folder)
 npm run dev
 ```
 
@@ -74,8 +88,13 @@ Open [http://localhost:5173](http://localhost:5173)
 ### Environment variables
 
 ```env
-GEMINI_API_KEY=your_key_here   # required — get at aistudio.google.com/apikey
-TAVILY_API_KEY=                # optional — falls back to DuckDuckGo if not set
+OPENAI_API_KEY=sk-...        # required
+TAVILY_API_KEY=tvly-...      # optional — falls back to DuckDuckGo if not set
+
+# Langfuse observability (all optional)
+LANGFUSE_PUBLIC_KEY=pk-lf-...
+LANGFUSE_SECRET_KEY=sk-lf-...
+LANGFUSE_HOST=https://cloud.langfuse.com
 ```
 
 ---
@@ -93,14 +112,14 @@ TAVILY_API_KEY=                # optional — falls back to DuckDuckGo if not se
 ```json
 {
   "post": {
-    "text": "I think politicians should wear sponsor jackets like F1 drivers...",
+    "text": "Politicians should wear sponsor jackets like F1 drivers...",
     "author": "user.bsky.social",
     "image_url": null
   },
   "bullets": [
-    "This idea was popularized by comedian Robin Williams in 2009...",
-    "The post uses the F1 driver sponsorship metaphor to critique...",
-    "The humor lands because it makes political funding visible in a visceral way..."
+    "This idea was popularized by comedian Robin Williams...",
+    "The post uses the F1 driver sponsorship metaphor to critique political funding...",
+    "The humor lands because it makes political donations visible in a visceral way..."
   ],
   "sources": [
     "https://www.snopes.com/fact-check/robin-williams-nascar-drivers/",
@@ -131,25 +150,34 @@ npm test
 
 ### Test architecture
 
-Tests follow a TDD approach — written before the implementation. Three layers:
+Three layers, written TDD-style before the implementation:
 
 - **Unit** (`tests/unit/`) — pure functions: URL parsing, query building, bullet formatting
 - **Integration** (`tests/integration/`) — external APIs mocked with `unittest.mock`
-- **API** (`tests/api/`) — full request/response via FastAPI `TestClient`
+- **API** (`tests/api/`) — full request/response cycle via FastAPI `TestClient`
 
 ---
 
 ## Eval harness
 
-The eval harness runs the agent against 12 labeled Bluesky posts and scores output quality.
+The eval harness runs the agent against 12 real Bluesky posts and scores output quality using two complementary methods:
 
 ```bash
 cd eval
 python run_eval.py            # all 12 cases
 python run_eval.py --limit 3  # quick smoke test
+python run_eval.py --no-judge # skip LLM judge (faster, no extra API cost)
 ```
 
-**Scoring**: 70% keyword matching (did the bullets surface expected concepts?) + 30% bullet count validation (3–5 bullets returned?). Results are written to `eval_results.json`.
+### Scoring
+
+| Metric | Weight | Method |
+|---|---|---|
+| Keyword coverage | 50% | Checks whether expected concepts appear in the bullets |
+| Bullet count | 20% | Validates 3–5 bullets were returned |
+| LLM-as-judge | 30% | GPT-4o-mini rates factual accuracy and relevance (0–10) |
+
+**Last run:** score `0.92`, 12/12 passed (threshold `0.60`). Results written to `eval_results.json`.
 
 The eval acts as **acceptance tests for the agent** — analogous to end-to-end tests, but for non-deterministic AI output.
 
@@ -157,20 +185,23 @@ The eval acts as **acceptance tests for the agent** — analogous to end-to-end 
 
 ## Design decisions
 
-**JSON mode over free-form text**
-The agent uses Gemini's `response_mime_type: application/json` with a strict schema. This eliminates fragile text parsing and guarantees the model always returns the expected structure, regardless of how the response is phrased.
+**Structured JSON output**
+The agent uses OpenAI's `json_schema` response format with `strict: true`. This eliminates fragile text parsing and guarantees the model always returns the expected structure, even when phrasing varies.
 
 **Source curation by the model**
 Instead of returning all search result URLs, the model selects 2–5 URLs that directly support its explanation. This makes sources meaningful rather than exhaustive.
 
 **Dual search providers**
-DuckDuckGo requires no API key and works out of the box. If a `TAVILY_API_KEY` is set, Tavily is used instead for higher-quality, longer snippets — better for obscure memes and slang.
+DuckDuckGo requires no API key and works out of the box. If `TAVILY_API_KEY` is set, Tavily is used instead for higher-quality, longer snippets — better for obscure references.
 
 **Lazy client initialization**
-The Gemini client is initialized on first request, not at module import time. This prevents startup crashes when API keys are missing and makes the server more resilient.
+The OpenAI client is initialized on first request, not at import time. This prevents startup crashes when API keys are missing and allows the health endpoint to always respond.
 
 **Frontend state machine**
-App state is modeled as a discriminated union (`idle | loading | success | error`), making impossible states unrepresentable and simplifying conditional rendering.
+App state is a discriminated union (`idle | loading | success | error`), making impossible states unrepresentable and keeping conditional rendering simple.
 
 **Image understanding**
-When a post contains an image, the agent fetches it and passes the raw bytes to Gemini alongside the text. Gemini 2.5 Flash is multimodal and incorporates visual context into the explanation.
+When a post contains an image, the agent fetches it, encodes it as base64, and passes it to GPT-4o alongside the text. GPT-4o is multimodal and incorporates visual context into the explanation.
+
+**LLM-as-judge eval**
+The eval harness uses GPT-4o-mini as an independent judge to rate each explanation for factual accuracy and relevance. This is more robust than keyword matching alone for catching hallucinations and off-topic responses.
