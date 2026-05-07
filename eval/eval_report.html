@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bluesky Explainer — Eval Report</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #0f1117;
+      color: #e2e8f0;
+      min-height: 100vh;
+      padding: 2rem 1rem;
+    }
+
+    .container { max-width: 900px; margin: 0 auto; }
+
+    /* ── Header ── */
+    header { text-align: center; margin-bottom: 2.5rem; }
+    header h1 { font-size: 1.9rem; font-weight: 700; color: #fff; }
+    header p  { color: #94a3b8; margin-top: .4rem; font-size: .95rem; }
+
+    /* ── Summary bar ── */
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+    }
+    .stat {
+      background: #1e2330;
+      border: 1px solid #2d3748;
+      border-radius: 12px;
+      padding: 1.2rem 1rem;
+      text-align: center;
+    }
+    .stat .value { font-size: 2.2rem; font-weight: 700; line-height: 1; }
+    .stat .label { font-size: .78rem; color: #64748b; margin-top: .4rem; text-transform: uppercase; letter-spacing: .05em; }
+    .stat.green .value { color: #4ade80; }
+    .stat.blue  .value { color: #60a5fa; }
+    .stat.amber .value { color: #fbbf24; }
+
+    /* ── Score bar ── */
+    .score-bar-wrap { margin-bottom: 2.5rem; }
+    .score-bar-wrap h2 { font-size: .85rem; color: #64748b; text-transform: uppercase; letter-spacing: .06em; margin-bottom: .7rem; }
+    .score-bar-bg {
+      background: #1e2330;
+      border-radius: 999px;
+      height: 12px;
+      overflow: hidden;
+      border: 1px solid #2d3748;
+    }
+    .score-bar-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #3b82f6, #4ade80);
+      transition: width .6s ease;
+    }
+
+    /* ── Case cards ── */
+    .cases { display: flex; flex-direction: column; gap: 1rem; }
+
+    .card {
+      background: #1e2330;
+      border: 1px solid #2d3748;
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    .card.pass { border-left: 4px solid #4ade80; }
+    .card.fail { border-left: 4px solid #f87171; }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      padding: .9rem 1.2rem;
+      cursor: pointer;
+      user-select: none;
+    }
+    .card-header:hover { background: #252d3f; }
+
+    .badge {
+      font-size: .7rem;
+      font-weight: 700;
+      padding: .2rem .55rem;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      flex-shrink: 0;
+    }
+    .badge.pass { background: #14532d; color: #4ade80; }
+    .badge.fail { background: #450a0a; color: #f87171; }
+
+    .card-id { font-weight: 600; font-size: .95rem; flex: 1; color: #e2e8f0; }
+
+    .score-pill {
+      font-size: .82rem;
+      font-weight: 700;
+      padding: .18rem .6rem;
+      border-radius: 999px;
+      flex-shrink: 0;
+    }
+    .score-pill.high  { background: #14532d33; color: #4ade80; }
+    .score-pill.mid   { background: #78350f33; color: #fbbf24; }
+    .score-pill.low   { background: #450a0a33; color: #f87171; }
+
+    .category-tag {
+      font-size: .7rem;
+      color: #64748b;
+      background: #0f1117;
+      border: 1px solid #2d3748;
+      padding: .15rem .5rem;
+      border-radius: 6px;
+      flex-shrink: 0;
+    }
+
+    .chevron { color: #475569; font-size: .8rem; flex-shrink: 0; transition: transform .2s; }
+    .card.open .chevron { transform: rotate(180deg); }
+
+    /* ── Card body ── */
+    .card-body { display: none; padding: 0 1.2rem 1.2rem; }
+    .card.open .card-body { display: block; }
+
+    .post-quote {
+      background: #0f1117;
+      border-left: 3px solid #3b82f6;
+      border-radius: 0 8px 8px 0;
+      padding: .6rem .9rem;
+      font-size: .85rem;
+      color: #94a3b8;
+      margin-bottom: 1rem;
+      font-style: italic;
+    }
+
+    .section-label {
+      font-size: .72rem;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      color: #475569;
+      margin-bottom: .5rem;
+    }
+
+    .bullets { list-style: none; display: flex; flex-direction: column; gap: .6rem; margin-bottom: 1rem; }
+    .bullets li {
+      background: #0f1117;
+      border-radius: 8px;
+      padding: .55rem .8rem;
+      font-size: .84rem;
+      line-height: 1.55;
+      color: #cbd5e1;
+      display: flex;
+      gap: .6rem;
+    }
+    .bullet-num {
+      background: #1e3a5f;
+      color: #60a5fa;
+      font-size: .68rem;
+      font-weight: 700;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .kw-row { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: 1rem; }
+    .kw {
+      font-size: .72rem;
+      padding: .2rem .55rem;
+      border-radius: 999px;
+      font-weight: 600;
+    }
+    .kw.found   { background: #14532d33; color: #4ade80; border: 1px solid #166534; }
+    .kw.missing { background: #450a0a33; color: #f87171; border: 1px solid #7f1d1d; }
+
+    .divider { border: none; border-top: 1px solid #2d3748; margin: .8rem 0; }
+
+    /* ── Footer ── */
+    footer { text-align: center; margin-top: 3rem; color: #334155; font-size: .8rem; }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <h1>Bluesky Post Explainer — Eval Report</h1>
+    <p>GPT-4o · DuckDuckGo search · 12 real posts · scored 2026-05-07</p>
+  </header>
+
+  <div class="summary">
+    <div class="stat green">
+      <div class="value">0.92</div>
+      <div class="label">Overall score</div>
+    </div>
+    <div class="stat blue">
+      <div class="value">12/12</div>
+      <div class="label">Cases passed</div>
+    </div>
+    <div class="stat amber">
+      <div class="value">0.60</div>
+      <div class="label">Pass threshold</div>
+    </div>
+  </div>
+
+  <div class="score-bar-wrap">
+    <h2>Overall score</h2>
+    <div class="score-bar-bg">
+      <div class="score-bar-fill" style="width: 92%"></div>
+    </div>
+  </div>
+
+  <div class="cases" id="cases"></div>
+
+  <footer>Generated by the eval harness · Bluesky Post Explainer</footer>
+</div>
+
+<script>
+const CATEGORIES = {
+  "breadsky-wild-yeast":       "community",
+  "real-madrid-fight":         "sports",
+  "bonnie-tyler-coma":         "entertainment",
+  "passport-child-support":    "politics",
+  "whirlpool-shares":          "finance",
+  "nba-lakers-thunder":        "sports",
+  "sam-altman-superintelligence": "tech",
+  "wnba-cba":                  "sports",
+  "bill-white-big-m":          "sports",
+  "willie-mays":               "sports",
+  "hezbollah-israel-iran":     "geopolitics",
+  "musk-altman-openai-lawsuit":"tech",
+};
+
+const POST_TEXTS = {
+  "breadsky-wild-yeast":       "Does wild yeast collected by Bluesky users make butterfly-shaped bread? Find out in the #Breadsky feed!",
+  "real-madrid-fight":         "Real Madrid teammates Federico Valverde and Aurelien Tchouameni were involved in a dressing-room fight at the club's training ground on Thursday.",
+  "bonnie-tyler-coma":         "Bonnie Tyler in induced coma after emergency intestinal surgery",
+  "passport-child-support":    "The U.S. will start revoking passports this week for parents who owe $100,000 or more in child support.",
+  "whirlpool-shares":          "Whirlpool shares hit 14-year low after slashing annual targets, suspending dividend",
+  "nba-lakers-thunder":        "Shai and OKC seek a 2-0 series lead. LeBron and LAL look to respond in Game 2. Lakers. Thunder. 9:30pm/et on Prime",
+  "sam-altman-superintelligence": "Can Sam Altman—or any CEO—be trusted with super intelligence?",
+  "wnba-cba":                  "The WNBA season is set to begin in just over 100 days, but there's a lot that needs to get done including the league and players negotiating a new CBA.",
+  "bill-white-big-m":          "The Big M with Chicago's Bill White in pursuit.",
+  "willie-mays":               "Willie Mays was born on this day in 1931. He was pretty good at the baseball.",
+  "hezbollah-israel-iran":     "When Hezbollah entered the US-Israeli war against Iran, officials in Israel saw a chance to finally drive the militia away from the country's border.",
+  "musk-altman-openai-lawsuit":"While Musk has long claimed that Altman 'stole a charity' by converting the company into a for-profit, OpenAI's lawyers argued the Tesla chief executive was happy to commercialize the lab.",
+};
+
+const data = {"overall_score":0.9241666666666665,"cases":[{"id":"breadsky-wild-yeast","score":1.0,"keywords_found":["yeast","bread","Bluesky","Breadsky","ferment"],"keywords_missing":[],"bullet_count":4,"count_ok":true,"bullets":["Wild yeast is a naturally occurring yeast that can be captured from the environment to ferment bread dough. Unlike commercial yeast, which is a controlled strain, wild yeast can vary in flavor and performance, making it popular among artisanal bakers for its unique taste contributions to bread.","The post refers to a community activity on Bluesky where users collect wild yeast to bake bread, which is then shared in the #Breadsky feed. This feed encourages creativity and community engagement around bread baking.","The mention of 'butterfly-shaped bread' likely refers to a playful or artistic approach to bread scoring, where bakers use a blade to create designs on the bread's surface before baking.","The post is humorous and engaging, combining the whimsical idea of butterfly-shaped bread with the collaborative spirit of the Bluesky community."]},{"id":"real-madrid-fight","score":1.0,"keywords_found":["Real Madrid","Valverde","Tchouameni","fight","training"],"keywords_missing":[],"bullet_count":4,"count_ok":true,"bullets":["Federico Valverde and Aurelien Tchouameni, both midfielders for Real Madrid, were involved in a heated altercation during a training session at Valdebebas. The incident reportedly started with a foul during a drill, escalating into a dressing-room confrontation.","This altercation is part of a series of internal conflicts at Real Madrid, reflecting growing tensions within the team under pressure as they trail behind Barcelona in the league standings.","The timing is critical as it occurred just days before an important match against Barcelona, where Real Madrid needs a win to prevent Barcelona from securing the league title.","This situation highlights the pressure professional athletes face in high-stakes environments, and how such incidents can affect team morale ahead of crucial matches."]},{"id":"bonnie-tyler-coma","score":1.0,"keywords_found":["Bonnie Tyler","Total Eclipse","singer","surgery","coma"],"keywords_missing":[],"bullet_count":4,"count_ok":true,"bullets":["Bonnie Tyler, the Welsh singer known for 'Total Eclipse of the Heart,' has been placed in a medically induced coma following emergency surgery for a perforated intestine, in Faro, Portugal.","The surgery initially went well and Tyler was recuperating, but her condition worsened, leading to her being placed on a ventilator in the ICU. Her prognosis is described as 'very guarded.'","Bonnie Tyler has been prominent in music since the late 1970s. She had plans for a European tour starting May 22, which may now be affected by her hospitalization.","The situation is particularly concerning given Tyler's age and the serious nature of her condition. Fans and the music community are closely following updates, hoping for her recovery."]},{"id":"passport-child-support","score":1.0,"keywords_found":["passport","child support","debt","policy","parents"],"keywords_missing":[],"bullet_count":4,"count_ok":true,"bullets":["The U.S. government is enforcing a policy allowing the revocation of passports from parents who owe significant child support, initially targeting those with arrears over $100,000. This policy is based on a law that has existed for 30 years but was rarely enforced proactively.","The Department of Health and Human Services (HHS) will share data with the State Department to identify individuals in significant arrears, enabling proactive passport revocation without waiting for renewal applications.","The policy aims to enforce child support payments by restricting international travel for those in arrears. Parents can avoid losing their passports by entering into a payment plan with HHS.","This marks a shift from reactive to proactive enforcement, potentially affecting thousands more if the threshold is lowered, underscoring the government's intent to ensure parents meet their financial obligations."]},{"id":"whirlpool-shares","score":1.0,"keywords_found":["Whirlpool","shares","dividend","low","appliance"],"keywords_missing":[],"bullet_count":4,"count_ok":true,"bullets":["Whirlpool shares have hit a 14-year low due to significant financial challenges, including slashing its annual earnings targets from $6 per share to $3–$3.50 per share and suspending its dividend.","The decline is attributed to low appliance demand—at levels not seen since the Great Financial Crisis—and macroeconomic challenges exacerbated by geopolitical tensions.","The company's decision to suspend dividends and focus on debt reduction reflects efforts to stabilize financially amid a challenging economic environment, causing a significant drop in share value.","This situation highlights the impact of broader economic conditions on major corporations and the tough decisions they must navigate during financial downturns."]},{"id":"nba-lakers-thunder","score":0.86,"keywords_found":["Lakers","Thunder","NBA","playoffs"],"keywords_missing":["LeBron"],"bullet_count":5,"count_ok":true,"bullets":["The Oklahoma City Thunder, led by Shai Gilgeous-Alexander, are facing the Los Angeles Lakers in the NBA Playoffs. The Thunder currently lead the series 1-0 after a decisive 108-90 victory in Game 1.","In Game 1, the Lakers attempted to contain Gilgeous-Alexander by double-teaming him, limiting his scoring to 18 points below his season average. Despite this, the Thunder's overall team performance secured their win.","Game 2 is crucial for the Lakers as they aim to even the series. The team needs to improve offensively, having scored only 90 points in Game 1—their lowest in a playoff game since 2021.","The post highlights anticipation for Game 2, with the Thunder looking to maintain their lead and the Lakers seeking redemption. The game is broadcast on Prime Video.","This matchup is interesting as it pits a seasoned Lakers team against a young, dynamic Thunder squad, showcasing the contrast in styles and strategies in the playoffs."]},{"id":"sam-altman-superintelligence","score":1.0,"keywords_found":["Sam Altman","OpenAI","superintelligence","CEO","AI"],"keywords_missing":[],"bullet_count":5,"count_ok":true,"bullets":["Sam Altman is the CEO of OpenAI, a leading AI research company. He has been a central figure in discussions about superintelligence—AI systems that surpass human intelligence in all aspects.","Concerns exist about whether Altman can be trusted with superintelligence development. Insider reports suggest issues of trust and transparency at OpenAI, with some questioning whether safety is prioritized over business interests.","Altman has acknowledged that AI could eventually perform a CEO's role better than humans, raising questions about the future of executive leadership and AI in decision-making.","The post by @techcrunch.com highlights these concerns, questioning whether any CEO should hold the keys to superintelligence given the ethical dilemmas involved.","This topic is relevant because it touches on the broader debate about AI governance and the ethical responsibilities of those leading AI development as systems become more capable."]},{"id":"wnba-cba","score":1.0,"keywords_found":["WNBA","CBA","season","players","negotiat"],"keywords_missing":[],"bullet_count":4,"count_ok":true,"bullets":["The WNBA and its players are negotiating a new Collective Bargaining Agreement (CBA) as the 2026 season approaches. This process has been ongoing for 15 months and is crucial for setting player salaries, revenue sharing, and league operations.","Key issues include revenue sharing and player housing. The league has proposed players receive 70% of net revenue, while players want 30% of gross revenue. Housing standards are also a point of contention.","The post highlights the urgency of these negotiations, as the new CBA must be finalized before the season starts, compounded by expansion drafts and a busy free agency period.","The negotiations are significant as they could lead to historic changes in player compensation, potentially allowing top players to earn multi-million dollar contracts for the first time in WNBA history."]},{"id":"bill-white-big-m","score":0.65,"keywords_found":["Bill White","Chicago"],"keywords_missing":["baseball","pursuit"],"bullet_count":5,"count_ok":true,"bullets":["The image features a hockey game between the Montreal Canadiens and the Chicago Blackhawks. 'The Big M' is the nickname of Frank Mahovlich, a prominent NHL player known for his time with the Canadiens.","Bill White, mentioned in the post, was a defenseman for the Chicago Blackhawks, known for solid defensive play during the late 1960s and early 1970s.","Frank Mahovlich, 'The Big M,' was a Hall of Fame left winger who played in the NHL from 1956 to 1974, known for his size, skill, and scoring ability with the Leafs, Red Wings, and Canadiens.","The image captures a moment of competitive play, highlighting the intense rivalry and skill level in the NHL during that era between two historic franchises.","This post evokes nostalgia for fans of classic hockey, recalling the era when players like Mahovlich and White were prominent figures in the sport."]},{"id":"willie-mays","score":0.86,"keywords_found":["Willie Mays","Giants","baseball","The Catch"],"keywords_missing":["Hall of Fame"],"bullet_count":5,"count_ok":true,"bullets":["Willie Mays, born May 6, 1931 in Westfield, Alabama, is widely regarded as one of the greatest baseball players in history. He played 22 seasons in MLB, primarily with the New York/San Francisco Giants.","Mays hit 660 home runs, won two National League MVP awards, and was a 24-time All-Star. His defensive prowess is epitomized by 'The Catch'—an iconic over-the-shoulder catch during the 1954 World Series.","The image in the post likely depicts 'The Catch,' showcasing the athleticism and defensive skill that are key aspects of Mays' legendary status in baseball history.","The post humorously understates Mays' achievements with 'He was pretty good at the baseball,' highlighting his extraordinary and undeniable impact on the sport.","Willie Mays' legacy extends beyond statistics; he broke racial barriers and inspired future generations, earning accolades including the Presidential Medal of Freedom."]},{"id":"hezbollah-israel-iran","score":0.86,"keywords_found":["Hezbollah","Israel","Iran","border"],"keywords_missing":["militia"],"bullet_count":4,"count_ok":true,"bullets":["Hezbollah is a Shiite militant group and political party based in Lebanon, heavily backed by Iran. It has been involved in numerous conflicts with Israel, often acting as a proxy for Iranian interests in the region.","The recent escalation involves Hezbollah entering the US-Israeli conflict against Iran, firing rockets into Israel, which has led to Israeli military responses targeting Hezbollah positions in Lebanon.","Israel has long sought to diminish Hezbollah's military presence near its northern border. The current conflict is seen as an opportunity to push Hezbollah away, potentially weakening the group's influence and capabilities.","This highlights the complex geopolitical dynamics in the Middle East, where regional powers like Iran use proxy groups to exert influence, with broader implications for regional stability and international relations."]},{"id":"musk-altman-openai-lawsuit","score":0.86,"keywords_found":["Musk","Altman","OpenAI","lawsuit"],"keywords_missing":["Tesla"],"bullet_count":5,"count_ok":true,"bullets":["Elon Musk co-founded OpenAI in 2015 as a nonprofit with the mission to safely develop AI. In 2018, Musk left following a power struggle with Sam Altman, who later added a for-profit arm to the organization.","Musk has accused Altman of 'stealing a charity' by converting OpenAI into a for-profit entity, claiming this betrayed the original nonprofit mission. This led Musk to file a lawsuit against OpenAI in 2024.","OpenAI's defense claims Musk was aware of and supported the transition to a for-profit model, and that his lawsuit is motivated by jealousy over OpenAI's success, especially after ChatGPT's launch and the Microsoft partnership.","The post highlights the ongoing legal battle, with Musk's claims countered by OpenAI's argument that his dissatisfaction stems from not being in control and the subsequent commercial success of the company.","This situation raises important questions about the ethical implications of transitioning a nonprofit into a for-profit in the rapidly evolving field of AI."]}]};
+
+function scoreClass(s) {
+  if (s >= 0.85) return "high";
+  if (s >= 0.65) return "mid";
+  return "low";
+}
+
+const container = document.getElementById("cases");
+
+data.cases.forEach(c => {
+  const pass = c.score >= 0.6;
+  const card = document.createElement("div");
+  card.className = `card ${pass ? "pass" : "fail"}`;
+
+  const allKw = [...c.keywords_found, ...c.keywords_missing];
+
+  card.innerHTML = `
+    <div class="card-header" onclick="this.closest('.card').classList.toggle('open')">
+      <span class="badge ${pass ? 'pass' : 'fail'}">${pass ? "PASS" : "FAIL"}</span>
+      <span class="card-id">${c.id}</span>
+      <span class="category-tag">${CATEGORIES[c.id] || ""}</span>
+      <span class="score-pill ${scoreClass(c.score)}">${c.score.toFixed(2)}</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="card-body">
+      <p class="post-quote">"${POST_TEXTS[c.id] || ""}"</p>
+
+      <p class="section-label">Keywords</p>
+      <div class="kw-row">
+        ${c.keywords_found.map(k => `<span class="kw found">✓ ${k}</span>`).join("")}
+        ${c.keywords_missing.map(k => `<span class="kw missing">✗ ${k}</span>`).join("")}
+      </div>
+
+      <hr class="divider" />
+
+      <p class="section-label">Bullets (${c.bullet_count})</p>
+      <ul class="bullets">
+        ${c.bullets.map((b, i) => `
+          <li>
+            <span class="bullet-num">${i + 1}</span>
+            <span>${b}</span>
+          </li>`).join("")}
+      </ul>
+    </div>
+  `;
+
+  container.appendChild(card);
+});
+</script>
+</body>
+</html>

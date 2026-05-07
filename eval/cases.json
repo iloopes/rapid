@@ -1,0 +1,110 @@
+[
+  {
+    "id": "breadsky-wild-yeast",
+    "url": "https://bsky.app/profile/bsky.app/post/3ml7bvrr4yk2l",
+    "post_text": "Does wild yeast collected by Bluesky users make butterfly-shaped bread? Find out in the #Breadsky feed!",
+    "expected_keywords": ["yeast", "bread", "Bluesky", "Breadsky", "ferment"],
+    "expected_bullet_count_min": 3,
+    "expected_bullet_count_max": 5,
+    "category": "community"
+  },
+  {
+    "id": "real-madrid-fight",
+    "url": "https://bsky.app/profile/nytimes.com/post/3mlbximquh22o",
+    "post_text": "Real Madrid teammates Federico Valverde and Aurelien Tchouameni were involved in a dressing-room fight at the club's training ground on Thursday.",
+    "expected_keywords": ["Real Madrid", "Valverde", "Tchouameni", "fight", "training"],
+    "expected_bullet_count_min": 3,
+    "expected_bullet_count_max": 5,
+    "category": "sports"
+  },
+  {
+    "id": "bonnie-tyler-coma",
+    "url": "https://bsky.app/profile/theguardian.com/post/3mlbxn3mth425",
+    "post_text": "Bonnie Tyler in induced coma after emergency intestinal surgery",
+    "expected_keywords": ["Bonnie Tyler", "Total Eclipse", "singer", "surgery", "coma"],
+    "expected_bullet_count_min": 3,
+    "expected_bullet_count_max": 5,
+    "category": "entertainment"
+  },
+  {
+    "id": "passport-child-support",
+    "url": "https://bsky.app/profile/apnews.com/post/3mlbxtrox6r2u",
+    "post_text": "The U.S. will start revoking passports this week for parents who owe $100,000 or more in child support.",
+    "expected_keywords": ["passport", "child support", "debt", "policy", "parents"],
+    "expected_bullet_count_min": 3,
+    "expected_bullet_count_max": 5,
+    "category": "politics"
+  },
+  {
+    "id": "whirlpool-shares",
+    "url": "https://bsky.app/profile/reuters.com/post/3mlbxtmless24",
+    "post_text": "Whirlpool shares hit 14-year low after slashing annual targets, suspending dividend",
+    "expected_keywords": ["Whirlpool", "shares", "dividend", "low", "appliance"],
+    "expected_bullet_count_min": 3,
+    "expected_bullet_count_max": 5,
+    "category": "finance"
+  },
+  {
+    "id": "nba-lakers-thunder",
+    "url": "https://bsky.app/profile/nba.com/post/3mlbwek4l4k2b",
+    "post_text": "Shai and OKC seek a 2-0 series lead and aim to remain unbeaten in the NBA Playoffs. LeBron and LAL look to respond in Game 2.",
+    "expected_keywords": ["Lakers", "Thunder", "NBA", "playoffs", "LeBron"],
+    "expected_bullet_count_min": 3,
+    "expected_bullet_count_max": 5,
+    "category": "sports"
+  },
+  {
+    "id": "sam-altman-superintelligence",
+    "url": "https://bsky.app/profile/techcrunch.com/post/3mlbwyk34ex2e",
+    "post_text": "Can Sam Altman—or any CEO—be trusted with super intelligence?",
+    "expected_keywords": ["Sam Altman", "OpenAI", "superintelligence", "CEO", "AI"],
+    "expected_bullet_count_min": 3,
+    "expected_bullet_count_max": 5,
+    "category": "tech"
+  },
+  {
+    "id": "wnba-cba",
+    "url": "https://bsky.app/profile/espn.com/post/3mdio2ct4yb2q",
+    "post_text": "The WNBA season is set to begin in just over 100 days, but there's a lot that needs to get done including the league and players negotiating a new CBA.",
+    "expected_keywords": ["WNBA", "CBA", "season", "players", "negotiat"],
+    "expected_bullet_count_min": 3,
+    "expected_bullet_count_max": 5,
+    "category": "sports"
+  },
+  {
+    "id": "bill-white-big-m",
+    "url": "https://bsky.app/profile/scabbyhabby.bsky.social/post/3mlbnr34nis2p",
+    "post_text": "The Big M with Chicago's Bill White in pursuit.",
+    "expected_keywords": ["Bill White", "Chicago", "baseball", "pursuit"],
+    "expected_bullet_count_min": 3,
+    "expected_bullet_count_max": 5,
+    "category": "sports"
+  },
+  {
+    "id": "willie-mays",
+    "url": "https://bsky.app/profile/scabbyhabby.bsky.social/post/3ml6rdn7vik2j",
+    "post_text": "Willie Mays was born on this day in 1931. He was pretty good at the baseball.",
+    "expected_keywords": ["Willie Mays", "Giants", "baseball", "The Catch", "Hall of Fame"],
+    "expected_bullet_count_min": 3,
+    "expected_bullet_count_max": 5,
+    "category": "sports"
+  },
+  {
+    "id": "hezbollah-israel-iran",
+    "url": "https://bsky.app/profile/bloomberg.com/post/3mlbxbluhgn2i",
+    "post_text": "When Hezbollah entered the US-Israeli war against Iran, officials in Israel saw a chance to finally drive the militia away from the country's border.",
+    "expected_keywords": ["Hezbollah", "Israel", "Iran", "border", "militia"],
+    "expected_bullet_count_min": 3,
+    "expected_bullet_count_max": 5,
+    "category": "geopolitics"
+  },
+  {
+    "id": "musk-altman-openai-lawsuit",
+    "url": "https://bsky.app/profile/arstechnica.com/post/3mlbxcjxe622i",
+    "post_text": "While Musk has long claimed that Altman 'stole a charity' by converting the company into a for-profit, OpenAI's lawyers have argued the Tesla chief executive was happy to commercialize the lab.",
+    "expected_keywords": ["Musk", "Altman", "OpenAI", "lawsuit", "Tesla"],
+    "expected_bullet_count_min": 3,
+    "expected_bullet_count_max": 5,
+    "category": "tech"
+  }
+]
