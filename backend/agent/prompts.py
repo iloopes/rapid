@@ -1,3 +1,35 @@
+import os
+
+PROMPT_NAME = "bluesky-explainer-system"
+
+_langfuse_client = None
+
+
+def _get_langfuse():
+    global _langfuse_client
+    if _langfuse_client is None and os.getenv("LANGFUSE_SECRET_KEY"):
+        from langfuse import Langfuse
+        _langfuse_client = Langfuse()
+    return _langfuse_client
+
+
+def get_langfuse_prompt():
+    """Return a Langfuse prompt object for the system prompt, or None if unavailable."""
+    lf = _get_langfuse()
+    if lf is None:
+        return None
+    try:
+        return lf.get_prompt(PROMPT_NAME)
+    except Exception:
+        return None
+
+
+def get_system_prompt() -> str:
+    """Return system prompt text — from Langfuse if available, otherwise hardcoded fallback."""
+    p = get_langfuse_prompt()
+    return p.compile() if p is not None else SYSTEM_PROMPT
+
+
 SYSTEM_PROMPT = """You are an AI agent that explains Bluesky posts by searching and synthesizing relevant context.
 
 Your goal is to produce a concise, well-sourced explanation.

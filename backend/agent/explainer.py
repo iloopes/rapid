@@ -7,7 +7,7 @@ import time
 import httpx
 from openai import OpenAI
 from agent.search import build_search_query, search_web
-from agent.prompts import SYSTEM_PROMPT, build_user_message
+from agent.prompts import get_langfuse_prompt, get_system_prompt, build_user_message
 
 
 def format_bullets(raw: str) -> list[str]:
@@ -95,8 +95,11 @@ def _core(post: dict) -> dict:
             })
     user_content.append({"type": "text", "text": text_prompt})
 
+    lf_prompt = get_langfuse_prompt()
+    system_text = lf_prompt.compile() if lf_prompt is not None else get_system_prompt()
+
     messages = [
-        {"role": "system", "content": SYSTEM_PROMPT},
+        {"role": "system", "content": system_text},
         {"role": "user",   "content": user_content},
     ]
 
@@ -111,30 +114,34 @@ def _core(post: dict) -> dict:
             print("[IMAGE: base64 jpeg]")
     print("="*60 + "\n")
 
+    create_kwargs = dict(
+        model="gpt-4o",
+        messages=messages,
+        response_format={
+            "type": "json_schema",
+            "json_schema": {
+                "name": "explanation",
+                "strict": True,
+                "schema": {
+                    "type": "object",
+                    "properties": {
+                        "bullets": {"type": "array", "items": {"type": "string"}},
+                        "sources": {"type": "array", "items": {"type": "string"}},
+                    },
+                    "required": ["bullets", "sources"],
+                    "additionalProperties": False,
+                },
+            },
+        },
+        temperature=0.3,
+        max_tokens=1500,
+    )
+    if lf_prompt is not None:
+        create_kwargs["langfuse_prompt"] = lf_prompt
+
     for attempt in range(3):
         try:
-            response = openai_client().chat.completions.create(
-                model="gpt-4o",
-                messages=messages,
-                response_format={
-                    "type": "json_schema",
-                    "json_schema": {
-                        "name": "explanation",
-                        "strict": True,
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "bullets": {"type": "array", "items": {"type": "string"}},
-                                "sources": {"type": "array", "items": {"type": "string"}},
-                            },
-                            "required": ["bullets", "sources"],
-                            "additionalProperties": False,
-                        },
-                    },
-                },
-                temperature=0.3,
-                max_tokens=1500,
-            )
+            response = openai_client().chat.completions.create(**create_kwargs)
             break
         except Exception as e:
             if "429" in str(e) and attempt < 2:
