@@ -30,10 +30,12 @@ class TestGetBlueskyPost:
 
         get_bluesky_post("user.bsky.social", "abc123")
 
-        call_url = mock_get.call_args[0][0]
+        call_args = mock_get.call_args
+        call_url = call_args[0][0]
+        call_params = call_args.kwargs.get("params", {})
         assert "com.atproto.repo.getRecord" in call_url
-        assert "user.bsky.social" in call_url
-        assert "abc123" in call_url
+        assert call_params.get("repo") == "user.bsky.social"
+        assert call_params.get("rkey") == "abc123"
 
     @patch("agent.bluesky.httpx.get")
     def test_post_nao_encontrado_levanta_excecao(self, mock_get):

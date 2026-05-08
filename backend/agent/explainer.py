@@ -1,3 +1,4 @@
+import re
 import os
 import sys
 import json
@@ -7,6 +8,30 @@ import httpx
 from openai import OpenAI
 from agent.search import build_search_query, search_web
 from agent.prompts import SYSTEM_PROMPT, build_user_message
+
+
+def format_bullets(raw: str) -> list[str]:
+    if not raw or not raw.strip():
+        raise ValueError("Texto vazio")
+
+    lines = raw.splitlines()
+    bullets = []
+    for line in lines:
+        line = line.strip()
+        if not line:
+            continue
+        # remove numbered prefixes like "1. ", "2. "
+        line = re.sub(r"^\d+\.\s*", "", line)
+        # remove bullet prefixes: •, -, *
+        line = re.sub(r"^[•\-\*]\s*", "", line)
+        line = line.strip()
+        if line:
+            bullets.append(line[:300])
+
+    if len(bullets) < 3:
+        raise ValueError("mínimo de 3 bullets")
+
+    return bullets
 
 _openai_client: OpenAI | None = None
 
