@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bluesky Explainer — Model Comparison</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #0f1117; color: #e2e8f0; min-height: 100vh; padding: 2rem 1rem;
+    }
+    .container { max-width: 860px; margin: 0 auto; }
+    header { text-align: center; margin-bottom: 2.5rem; }
+    header h1 { font-size: 1.9rem; font-weight: 700; color: #fff; }
+    header p { color: #94a3b8; margin-top: .4rem; font-size: .95rem; }
+
+    h2 { font-size: .82rem; text-transform: uppercase; letter-spacing: .07em;
+          color: #64748b; margin-bottom: .9rem; }
+
+    section { margin-bottom: 2.5rem; }
+
+    /* summary table */
+    table { width: 100%; border-collapse: collapse; }
+    th { font-size: .72rem; text-transform: uppercase; letter-spacing: .06em;
+          color: #64748b; padding: .5rem .8rem; text-align: left;
+          border-bottom: 1px solid #2d3748; }
+    td { padding: .65rem .8rem; border-bottom: 1px solid #1e2330; font-size: .9rem; }
+    tr:hover td { background: #1a2035; }
+    .model-name { font-weight: 700; color: #e2e8f0; }
+    .case-id { font-size: .8rem; color: #94a3b8; font-family: monospace; }
+
+    /* score bars */
+    .bar-row { display: flex; align-items: center; gap: .8rem; margin-bottom: .6rem; }
+    .bar-label { width: 140px; font-size: .85rem; color: #e2e8f0; flex-shrink: 0;
+                  font-weight: 600; }
+    .bar-bg { flex: 1; background: #1e2330; border-radius: 999px; height: 10px;
+               overflow: hidden; border: 1px solid #2d3748; }
+    .bar-fill { height: 100%; border-radius: 999px; transition: width .6s ease; }
+    .bar-val { width: 40px; font-size: .85rem; font-weight: 700; text-align: right;
+                flex-shrink: 0; }
+
+    footer { text-align: center; margin-top: 3rem; color: #334155; font-size: .8rem; }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <h1>Bluesky Post Explainer — Model Comparison</h1>
+    <p>GPT-4o · DuckDuckGo search · 12 posts · scored 2026-05-08</p>
+  </header>
+
+  <section>
+    <h2>Summary</h2>
+    <table>
+      <thead><tr><th>Model</th><th>Overall score</th><th>Passed</th><th>Avg judge</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="model-name">gpt-4o</td>
+          <td style="color:#4ade80;font-weight:700">0.93</td>
+          <td>12/12</td>
+          <td>0.9/10</td>
+        </tr>
+        <tr>
+          <td class="model-name">gpt-4o-mini</td>
+          <td style="color:#4ade80;font-weight:700">0.91</td>
+          <td>12/12</td>
+          <td>0.9/10</td>
+        </tr></tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Score bars</h2>
+    
+        <div class="bar-row">
+          <span class="bar-label">gpt-4o</span>
+          <div class="bar-bg">
+            <div class="bar-fill" style="width:93%;background:#4ade80"></div>
+          </div>
+          <span class="bar-val" style="color:#4ade80">0.93</span>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">gpt-4o-mini</span>
+          <div class="bar-bg">
+            <div class="bar-fill" style="width:91%;background:#4ade80"></div>
+          </div>
+          <span class="bar-val" style="color:#4ade80">0.91</span>
+        </div>
+  </section>
+
+  <section>
+    <h2>Per-case breakdown</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Case</th>
+          <th>gpt-4o</th><th>gpt-4o-mini</th>
+          <th>Delta</th>
+          <th>Winner</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="case-id">breadsky-wild-yeast</td>
+          <td style="color:#4ade80;font-weight:600">0.97</td><td style="color:#4ade80;font-weight:600">0.94</td>
+          <td style="color:#94a3b8;font-weight:600">±0.03</td>
+          <td style="color:#94a3b8;font-size:.78rem">gpt-4o</td>
+        </tr>
+        <tr>
+          <td class="case-id">real-madrid-fight</td>
+          <td style="color:#fbbf24;font-weight:600">0.82</td><td style="color:#fbbf24;font-weight:600">0.82</td>
+          <td style="color:#94a3b8;font-weight:600">±0.00</td>
+          <td style="color:#94a3b8;font-size:.78rem">tie</td>
+        </tr>
+        <tr>
+          <td class="case-id">bonnie-tyler-coma</td>
+          <td style="color:#4ade80;font-weight:600">1.00</td><td style="color:#4ade80;font-weight:600">1.00</td>
+          <td style="color:#94a3b8;font-weight:600">±0.00</td>
+          <td style="color:#94a3b8;font-size:.78rem">tie</td>
+        </tr>
+        <tr>
+          <td class="case-id">passport-child-support</td>
+          <td style="color:#4ade80;font-weight:600">0.90</td><td style="color:#4ade80;font-weight:600">0.90</td>
+          <td style="color:#94a3b8;font-weight:600">±0.00</td>
+          <td style="color:#94a3b8;font-size:.78rem">tie</td>
+        </tr>
+        <tr>
+          <td class="case-id">whirlpool-shares</td>
+          <td style="color:#4ade80;font-weight:600">1.00</td><td style="color:#4ade80;font-weight:600">1.00</td>
+          <td style="color:#94a3b8;font-weight:600">±0.00</td>
+          <td style="color:#94a3b8;font-size:.78rem">tie</td>
+        </tr>
+        <tr>
+          <td class="case-id">nba-lakers-thunder</td>
+          <td style="color:#4ade80;font-weight:600">1.00</td><td style="color:#4ade80;font-weight:600">0.97</td>
+          <td style="color:#94a3b8;font-weight:600">±0.03</td>
+          <td style="color:#94a3b8;font-size:.78rem">gpt-4o</td>
+        </tr>
+        <tr>
+          <td class="case-id">sam-altman-superintelligence</td>
+          <td style="color:#4ade80;font-weight:600">0.97</td><td style="color:#4ade80;font-weight:600">0.97</td>
+          <td style="color:#94a3b8;font-weight:600">±0.00</td>
+          <td style="color:#94a3b8;font-size:.78rem">tie</td>
+        </tr>
+        <tr>
+          <td class="case-id">wnba-cba</td>
+          <td style="color:#4ade80;font-weight:600">0.88</td><td style="color:#4ade80;font-weight:600">1.00</td>
+          <td style="color:#4ade80;font-weight:600">±0.12</td>
+          <td style="color:#94a3b8;font-size:.78rem">gpt-4o-mini</td>
+        </tr>
+        <tr>
+          <td class="case-id">bill-white-big-m</td>
+          <td style="color:#4ade80;font-weight:600">0.88</td><td style="color:#fbbf24;font-weight:600">0.75</td>
+          <td style="color:#4ade80;font-weight:600">±0.13</td>
+          <td style="color:#94a3b8;font-size:.78rem">gpt-4o</td>
+        </tr>
+        <tr>
+          <td class="case-id">willie-mays</td>
+          <td style="color:#4ade80;font-weight:600">1.00</td><td style="color:#4ade80;font-weight:600">0.90</td>
+          <td style="color:#4ade80;font-weight:600">±0.10</td>
+          <td style="color:#94a3b8;font-size:.78rem">gpt-4o</td>
+        </tr>
+        <tr>
+          <td class="case-id">hezbollah-israel-iran</td>
+          <td style="color:#4ade80;font-weight:600">0.87</td><td style="color:#4ade80;font-weight:600">0.97</td>
+          <td style="color:#4ade80;font-weight:600">±0.10</td>
+          <td style="color:#94a3b8;font-size:.78rem">gpt-4o-mini</td>
+        </tr>
+        <tr>
+          <td class="case-id">musk-altman-openai-lawsuit</td>
+          <td style="color:#4ade80;font-weight:600">0.90</td><td style="color:#fbbf24;font-weight:600">0.74</td>
+          <td style="color:#4ade80;font-weight:600">±0.16</td>
+          <td style="color:#94a3b8;font-size:.78rem">gpt-4o</td>
+        </tr></tbody>
+    </table>
+  </section>
+
+  <footer>Generated by the eval harness · Bluesky Post Explainer</footer>
+</div>
+</body>
+</html>

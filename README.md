@@ -33,7 +33,7 @@ The agent uses a **retrieval-augmented generation (RAG)** approach: every bullet
 | Frontend | React + Vite + TypeScript + Tailwind + shadcn/ui |
 | Observability | Langfuse (optional, traces every LLM call) |
 | Tests | pytest (backend) · Vitest + React Testing Library (frontend) |
-| Eval | Keyword scoring + LLM-as-judge · 12 labeled real posts |
+| Eval | Keyword scoring + LLM-as-judge · 24 labeled real posts · multi-model comparison |
 
 ---
 
@@ -164,9 +164,11 @@ The eval harness runs the agent against 12 real Bluesky posts and scores output 
 
 ```bash
 cd eval
-python run_eval.py            # all 12 cases
-python run_eval.py --limit 3  # quick smoke test
-python run_eval.py --no-judge # skip LLM judge (faster, no extra API cost)
+python run_eval.py                              # 12 cases, gpt-4o
+python run_eval.py --cases cases_v2.json        # 12 new cases (batch 2)
+python run_eval.py --limit 3                    # quick smoke test
+python run_eval.py --no-judge                   # skip LLM judge (faster)
+python run_eval.py --model gpt-4o,gpt-4o-mini   # multi-model comparison
 ```
 
 ### Scoring
@@ -177,7 +179,9 @@ python run_eval.py --no-judge # skip LLM judge (faster, no extra API cost)
 | Bullet count | 20% | Validates 3–5 bullets were returned |
 | LLM-as-judge | 30% | GPT-4o-mini rates factual accuracy and relevance (0–10) |
 
-**Last run:** score `0.92`, 12/12 passed (threshold `0.60`). Results written to `eval_results.json`.
+**Last run (gpt-4o):** score `0.93`, 12/12 passed · **gpt-4o-mini:** score `0.91`, 12/12 passed (threshold `0.60`).
+
+When comparing multiple models, the harness generates `eval_comparison.html` with a side-by-side breakdown showing score per case, delta, and winner for each pair. The LLM judge always uses `gpt-4o-mini` as a fixed referee regardless of the model under test.
 
 The eval acts as **acceptance tests for the agent** — analogous to end-to-end tests, but for non-deterministic AI output.
 

@@ -1,0 +1,366 @@
+{
+  "model": "gpt-4o-mini",
+  "overall_score": 0.9133333333333332,
+  "passed": 12,
+  "total": 12,
+  "cases": [
+    {
+      "id": "breadsky-wild-yeast",
+      "score": 0.94,
+      "keyword_score": 1.0,
+      "count_score": 1.0,
+      "judge_score": 0.8,
+      "judge_reasoning": "The explanation accurately describes wild yeast and its use in baking, addresses the playful aspect of butterfly-shaped bread, and connects it to the community aspect of the #Breadsky feed, though it could be more directly tied to the specific inquiry about Bluesky users.",
+      "keywords_found": [
+        "yeast",
+        "bread",
+        "Bluesky",
+        "Breadsky",
+        "ferment"
+      ],
+      "keywords_missing": [],
+      "bullet_count": 5,
+      "count_ok": true,
+      "bullets": [
+        "Wild yeast is naturally occurring yeast found in the environment, often captured from fruits or flowers, and is used in baking to ferment dough, giving bread its rise and flavor.",
+        "The concept of using wild yeast has gained popularity with home bakers, particularly through methods like creating yeast water from fruits, which can be used to make various types of bread, including soft rolls and artisan loaves.",
+        "The mention of 'butterfly-shaped bread' in the post likely refers to a playful or artistic approach to bread-making, where bakers shape their dough into creative forms, adding a fun element to the baking process.",
+        "The #Breadsky feed on Bluesky suggests a community-driven exploration of bread-making, where users can share their unique creations and experiences, fostering creativity and collaboration among bakers.",
+        "This post is interesting because it combines the whimsical idea of shaping bread into butterflies with the communal aspect of sharing baking experiences, highlighting how social media can inspire culinary creativity."
+      ],
+      "sources": [
+        "https://theflavorbells.com/wild-yeast-bread-or-yeast-water-bread-recipe/",
+        "https://www.rosemarymark.com/wild-yeast-water-soft-dinner-rolls/"
+      ]
+    },
+    {
+      "id": "real-madrid-fight",
+      "score": 0.82,
+      "keyword_score": 1.0,
+      "count_score": 1.0,
+      "judge_score": 0.4,
+      "judge_reasoning": "While the explanation provides some context and details about the incident, it contains inaccuracies regarding the timeline and severity of the events, which detracts from its factual accuracy.",
+      "keywords_found": [
+        "Real Madrid",
+        "Valverde",
+        "Tchouameni",
+        "fight",
+        "training"
+      ],
+      "keywords_missing": [],
+      "bullet_count": 4,
+      "count_ok": true,
+      "bullets": [
+        "Federico Valverde and Aurelien Tchouameni, both midfielders for Real Madrid, were involved in multiple altercations during training sessions, culminating in a serious fight that resulted in Valverde being taken to the hospital with a head injury.",
+        "The initial confrontation occurred during a training session on Wednesday, where Tchouameni reacted to a strong tackle from Valverde, leading to a heated argument that escalated into a physical fight the following day in the dressing room.",
+        "The incidents have raised concerns about the team's internal dynamics, especially as they come just days before a crucial match against Barcelona, where tensions are already high due to the team's performance in La Liga.",
+        "This situation is particularly noteworthy as it highlights the growing dysfunction within Real Madrid, a club known for its high-pressure environment, and raises questions about team cohesion at a critical point in the season."
+      ],
+      "sources": [
+        "https://www.skysports.com/football/news/32461/13541190/aurelien-tchouameni-and-federico-valderde-real-madrid-players-hold-crisis-meeting-after-training-ground-fight-sees-valderde-sent-to-hospital",
+        "https://www.nytimes.com/athletic/7262934/2026/05/08/real-madrid-tchouameni-valverde-clasico-arbeloa-perez/",
+        "https://www.bbc.com/sport/football/articles/c98r4218l73o"
+      ]
+    },
+    {
+      "id": "bonnie-tyler-coma",
+      "score": 1.0,
+      "keyword_score": 1.0,
+      "count_score": 1.0,
+      "judge_score": 1.0,
+      "judge_reasoning": "The explanation accurately details Bonnie Tyler's situation following her surgery, addresses the post's content directly, and provides relevant context about her career and the implications of her health status.",
+      "keywords_found": [
+        "Bonnie Tyler",
+        "Total Eclipse",
+        "singer",
+        "surgery",
+        "coma"
+      ],
+      "keywords_missing": [],
+      "bullet_count": 5,
+      "count_ok": true,
+      "bullets": [
+        "Bonnie Tyler, a Welsh singer famous for hits like 'Total Eclipse of the Heart' and 'Holding Out for a Hero,' underwent emergency intestinal surgery in Faro, Portugal, where she has a home.",
+        "Following the surgery, which was initially reported as successful, Tyler's condition deteriorated, leading doctors to place her in a medically induced coma to aid her recovery.",
+        "At 74 years old, Tyler has been actively preparing for a tour, with performances scheduled throughout Europe later this year, highlighting her enduring presence in the music industry.",
+        "The news of her induced coma is concerning for fans and highlights the unpredictability of health issues, even for long-established artists who continue to perform and tour.",
+        "This situation resonates with many as it underscores the fragility of health, particularly for those in the public eye, and evokes sympathy and support from her fanbase."
+      ],
+      "sources": [
+        "https://www.pastemagazine.com/music/bonnie-tyler/bonnie-tyler-placed-in-medical-coma-total-eclipse",
+        "https://www.mirror.co.uk/3am/celebrity-news/bonnie-tyler-74-in-induced-37126000",
+        "https://abcnews.com/GMA/Culture/singer-bonnie-tyler-medically-induced-coma-recovering-emergency/story?id=132757549"
+      ]
+    },
+    {
+      "id": "passport-child-support",
+      "score": 0.9,
+      "keyword_score": 0.8,
+      "count_score": 1.0,
+      "judge_score": 1.0,
+      "judge_reasoning": "The explanation accurately details the U.S. policy on passport revocation for parents with significant child support arrears and directly addresses the content of the post.",
+      "keywords_found": [
+        "passport",
+        "child support",
+        "policy",
+        "parents"
+      ],
+      "keywords_missing": [
+        "debt"
+      ],
+      "bullet_count": 5,
+      "count_ok": true,
+      "bullets": [
+        "The U.S. State Department is revoking passports from parents who owe $100,000 or more in child support, affecting about 2,700 individuals initially. This enforcement action begins this week and is part of a broader initiative to collect unpaid child support.",
+        "This policy is based on a 1996 federal law that allows passport restrictions for individuals with significant child support arrears, although it has rarely been enforced until now. The program aims to encourage parents to fulfill their financial obligations to their children.",
+        "The new enforcement strategy marks a shift from previous practices where passport restrictions were only applied during renewal applications. Now, the State Department will proactively revoke passports based on reported arrears from the Department of Health and Human Services.",
+        "This action is significant as it represents a more aggressive approach by the government to ensure that parents meet their child support responsibilities, potentially impacting thousands more as the policy expands to those owing over $2,500.",
+        "The policy is interesting because it combines legal enforcement with a practical consequence (passport revocation) that directly affects the ability of parents to travel, thereby incentivizing compliance with child support obligations."
+      ],
+      "sources": [
+        "https://thekenyatimes.com/americas/us-revoke-passports/",
+        "https://www.ksla.com/2026/05/07/us-will-start-revoking-passports-thousands-parents-who-owe-child-support-ap-learns/",
+        "https://www.pbs.org/newshour/politics/ap-report-americans-who-owe-significant-child-support-will-have-their-u-s-passports-revoked"
+      ]
+    },
+    {
+      "id": "whirlpool-shares",
+      "score": 1.0,
+      "keyword_score": 1.0,
+      "count_score": 1.0,
+      "judge_score": 1.0,
+      "judge_reasoning": "The explanation accurately details the reasons behind Whirlpool's share price decline, the suspension of dividends, and the broader economic context, all of which are relevant to the original post.",
+      "keywords_found": [
+        "Whirlpool",
+        "shares",
+        "dividend",
+        "low",
+        "appliance"
+      ],
+      "keywords_missing": [],
+      "bullet_count": 5,
+      "count_ok": true,
+      "bullets": [
+        "Whirlpool's shares recently fell to a 14-year low after the company cut its full-year profit forecast by half and suspended its dividend, a significant move for a major appliance manufacturer.",
+        "The decline in share price is attributed to several factors, including high interest rates, a sluggish housing market, and cautious consumer spending due to persistent inflation, which has reduced demand for appliance replacements.",
+        "Whirlpool's CEO indicated that the ongoing conflict in the Middle East has exacerbated economic pressures, leading to increased energy prices and further tightening household budgets, which affects consumer purchasing behavior.",
+        "The suspension of dividends is part of Whirlpool's strategy to conserve cash and reduce debt, aiming to lower its long-term debt to under $5 billion amidst a challenging market environment.",
+        "This situation is particularly interesting as it highlights the broader economic challenges facing consumer goods companies, reflecting how external factors like geopolitical conflicts can influence corporate performance and investor sentiment."
+      ],
+      "sources": [
+        "https://www.lapost.com/content/whirlpool-shares-hit-14-year-low-after-slashing-annual-targets-suspending-dividend",
+        "https://www.ctvnews.ca/business/article/whirlpool-shares-hit-14-year-low-after-slashing-annual-targets-suspending-dividend",
+        "https://www.tradingview.com/news/reuters.com,2026:newsml_L4N41K1J4:0-whirlpool-shares-hit-14-year-low-after-slashing-annual-targets-suspending-dividend"
+      ]
+    },
+    {
+      "id": "nba-lakers-thunder",
+      "score": 0.97,
+      "keyword_score": 1.0,
+      "count_score": 1.0,
+      "judge_score": 0.9,
+      "judge_reasoning": "The explanation accurately summarizes the post's content, providing relevant details about the teams, players, and context of the game.",
+      "keywords_found": [
+        "Lakers",
+        "Thunder",
+        "NBA",
+        "playoffs",
+        "LeBron"
+      ],
+      "keywords_missing": [],
+      "bullet_count": 5,
+      "count_ok": true,
+      "bullets": [
+        "The post announces Game 2 of the NBA Playoffs between the Los Angeles Lakers and the Oklahoma City Thunder, highlighting the Thunder's 1-0 series lead after winning Game 1.",
+        "LeBron James leads the Lakers, who are looking to bounce back after a disappointing performance in Game 1, where they lost 108-90 to the Thunder.",
+        "Shai Gilgeous-Alexander is a key player for the Thunder, who aim to secure a 2-0 lead in the series, capitalizing on their home-court advantage at Paycom Center.",
+        "The game is set for 9:30 PM ET and will be streamed on Amazon Prime, making it accessible for fans to watch live.",
+        "This matchup is particularly interesting as it features two star players, LeBron and Shai, representing the old and new generations of NBA talent, with significant implications for both teams' playoff aspirations."
+      ],
+      "sources": [
+        "https://www.newson6.com/oklahoma-city-thunder/thunder-aim-for-2-0-series-lead-as-lakers-search-for-answers-in-game-2",
+        "https://www.oklahoman.com/story/sports/nba/thunder/2026/05/01/okc-thunder-lakers-playoff-schedule-nba-series-tv-channel/89905300007"
+      ]
+    },
+    {
+      "id": "sam-altman-superintelligence",
+      "score": 0.97,
+      "keyword_score": 1.0,
+      "count_score": 1.0,
+      "judge_score": 0.9,
+      "judge_reasoning": "The explanation accurately addresses the concerns about trust in Sam Altman as a CEO in the context of superintelligence, while also providing relevant background information and context.",
+      "keywords_found": [
+        "Sam Altman",
+        "OpenAI",
+        "superintelligence",
+        "CEO",
+        "AI"
+      ],
+      "keywords_missing": [],
+      "bullet_count": 4,
+      "count_ok": true,
+      "bullets": [
+        "Sam Altman is the CEO of OpenAI, a leading organization in artificial intelligence development, known for creating models like ChatGPT. His leadership has sparked debates about trust and accountability in AI technology.",
+        "Recent investigations have raised concerns about Altman's credibility, suggesting that he may prioritize company goals over safety and ethical considerations, leading to skepticism among OpenAI insiders and the public.",
+        "The question of whether any single CEO, including Altman, can be trusted with superintelligence reflects broader anxieties about the concentration of power in AI development and its implications for society.",
+        "This post is particularly relevant as it highlights the tension between innovation and ethical responsibility in AI, a topic of increasing importance as these technologies become more integrated into daily life."
+      ],
+      "sources": [
+        "https://www.trendduniya.com/blog/sam-altman-controversy-2026-openai-ceo-trust-google-anthropic-deal",
+        "https://arstechnica.com/tech-policy/2026/04/the-problem-is-sam-altman-openai-insiders-dont-trust-ceo/"
+      ]
+    },
+    {
+      "id": "wnba-cba",
+      "score": 1.0,
+      "keyword_score": 1.0,
+      "count_score": 1.0,
+      "judge_score": 1.0,
+      "judge_reasoning": "The explanation accurately addresses the post's content about the WNBA season and the importance of negotiating a new CBA, providing relevant details and context.",
+      "keywords_found": [
+        "WNBA",
+        "CBA",
+        "season",
+        "players",
+        "negotiat"
+      ],
+      "keywords_missing": [],
+      "bullet_count": 5,
+      "count_ok": true,
+      "bullets": [
+        "The WNBA season is scheduled to begin on May 8, 2026, contingent upon the successful negotiation of a new collective bargaining agreement (CBA) between the league and the players' union.",
+        "The last CBA was agreed upon in January 2020, and the current negotiations have been ongoing since the players opted out of the previous agreement in October 2024, highlighting ongoing issues like player compensation and working conditions.",
+        "The new CBA is expected to include significant changes, such as revenue sharing, increased salary caps, and improved benefits for players, particularly regarding family planning and support for athletes who are pregnant or raising families.",
+        "The urgency of these negotiations is underscored by the impending start of the season, with players and the league needing to finalize terms to avoid delays in training camps and free agency.",
+        "This situation is particularly interesting as it reflects broader trends in women's sports, where athletes are increasingly advocating for fair compensation and better working conditions, signaling a shift in how women's sports are valued."
+      ],
+      "sources": [
+        "https://www.usnews.com/news/sports/articles/2026-01-21/wnba-season-set-to-begin-may-8-if-new-cba-is-reached-league-will-take-17-day-fiba-world-cup-break",
+        "https://www.espn.com/wnba/story/_/id/47011671/wnba-cba-negotiations-wnbpa-updates-latest-news",
+        "https://lawreview.law.miami.edu/from-bargaining-to-breakthrough-how-the-wnbas-new-collective-bargaining-agreement-rewrites-the-rules-for-womens-sports/",
+        "https://blogs.shu.edu/stillmanexchange/2026/04/12/the-new-wnba-collective-bargaining-agreement/",
+        "https://www.wnba.com/news/wnba-wnbpa-tentative-cba-deal-2026"
+      ]
+    },
+    {
+      "id": "bill-white-big-m",
+      "score": 0.75,
+      "keyword_score": 0.5,
+      "count_score": 1.0,
+      "judge_score": 1.0,
+      "judge_reasoning": "The explanation accurately describes the players involved, their significance in hockey history, and the context of the rivalry, directly addressing the content of the post.",
+      "keywords_found": [
+        "Bill White",
+        "Chicago"
+      ],
+      "keywords_missing": [
+        "baseball",
+        "pursuit"
+      ],
+      "bullet_count": 5,
+      "count_ok": true,
+      "bullets": [
+        "The image features Henri Richard, known as 'The Big M,' a legendary Montreal Canadiens player, known for his speed and skill on the ice, playing against Bill White of the Chicago Blackhawks.",
+        "Bill White was a six-time NHL All-Star and a key defenseman for the Blackhawks, known for his strong defensive play and contribution to the team's success in the early 1970s.",
+        "The matchup depicted in the image highlights a classic rivalry between the Canadiens and the Blackhawks, two of the most storied franchises in NHL history.",
+        "This post is interesting as it captures a moment from a significant era in hockey, showcasing the talent of both players and the competitive spirit of the league during that time.",
+        "The reference to 'The Big M' emphasizes Richard's status as a hockey icon, while also paying tribute to White's contributions to the game."
+      ],
+      "sources": [
+        "https://chicago.suntimes.com/2017/5/21/18320887/former-blackhawks-all-star-defenseman-bill-white-dies-at-77"
+      ]
+    },
+    {
+      "id": "willie-mays",
+      "score": 0.9,
+      "keyword_score": 0.8,
+      "count_score": 1.0,
+      "judge_score": 1.0,
+      "judge_reasoning": "The explanation accurately details Willie Mays' birth date, career achievements, and significance in baseball, directly addressing the post's celebration of his birthday.",
+      "keywords_found": [
+        "Willie Mays",
+        "Giants",
+        "baseball",
+        "The Catch"
+      ],
+      "keywords_missing": [
+        "Hall of Fame"
+      ],
+      "bullet_count": 5,
+      "count_ok": true,
+      "bullets": [
+        "Willie Mays, born on May 6, 1931, in Westfield, Alabama, is a legendary figure in baseball, known for his exceptional skills as a centerfielder.",
+        "He began his career with the Birmingham Black Barons in the Negro Leagues before debuting in Major League Baseball (MLB) with the New York Giants in 1951.",
+        "Mays played 22 seasons in the MLB, earning accolades such as two-time National League MVP, 24-time All-Star, and 12-time Gold Glove Award winner, and is famous for 'The Catch' in the 1954 World Series.",
+        "The post celebrates Mays' birthday, highlighting his impact on the sport and his status as one of baseball's all-time greats.",
+        "Mays' legacy transcends sports; he symbolizes the integration of baseball and the achievements of Black athletes in America."
+      ],
+      "sources": [
+        "https://blackchronicle.com/national/on-this-day-willie-mays-hall-of-fame-icon-was-born/?srsltid=AfmBOoq2YuuVCcdwCaEpits2WRxOOB--I_qhqHVS9ITLIwyxX2CO5pQ4",
+        "https://www.britannica.com/facts/Willie-Mays",
+        "https://www.baseball-reference.com/players/m/mayswi01.shtml"
+      ]
+    },
+    {
+      "id": "hezbollah-israel-iran",
+      "score": 0.97,
+      "keyword_score": 1.0,
+      "count_score": 1.0,
+      "judge_score": 0.9,
+      "judge_reasoning": "The explanation accurately describes the context of Hezbollah's involvement in the conflict and its implications for Israel, while also addressing the post's main points.",
+      "keywords_found": [
+        "Hezbollah",
+        "Israel",
+        "Iran",
+        "border",
+        "militia"
+      ],
+      "keywords_missing": [],
+      "bullet_count": 5,
+      "count_ok": true,
+      "bullets": [
+        "Hezbollah, a Lebanese militant group backed by Iran, has re-entered the conflict against Israel, marking a significant escalation in the ongoing US-Israel war with Iran that began in late February 2026.",
+        "The recent hostilities were triggered by the killing of Iran's Supreme Leader Ali Khamenei in US-Israeli strikes, prompting Hezbollah to retaliate by launching attacks on northern Israel.",
+        "Israeli officials view this as an opportunity to push Hezbollah away from their border, as they have long sought to diminish the militia's influence and military capabilities in the region.",
+        "The post highlights the complex dynamics of the conflict, where Hezbollah's involvement could lead to a broader confrontation, raising fears of a prolonged war that could destabilize the region further.",
+        "This situation is particularly interesting as it reflects the ongoing struggle for power and influence in the Middle East, showcasing how local conflicts can quickly escalate into larger geopolitical confrontations."
+      ],
+      "sources": [
+        "https://forward.com/fast-forward/809149/hezbollah-enters-iran-war-firing-on-israels-north-as-us-officials-say-more-fighting-is-to-come/",
+        "https://themedialine.org/mideast-daily-news/israel-reinforces-the-border-and-hits-beirut-as-hezbollah-joins-the-iran-war/",
+        "https://globalpost.com/stories/israel-begins-ground-operations-in-lebanon-against-hezbollah-us-allies-rebuff-plea-for-aid-with-strait-of-hormuz/"
+      ]
+    },
+    {
+      "id": "musk-altman-openai-lawsuit",
+      "score": 0.74,
+      "keyword_score": 0.6,
+      "count_score": 1.0,
+      "judge_score": 0.8,
+      "judge_reasoning": "The explanation accurately describes the background of OpenAI, Musk's claims, and the implications of the situation, though it could be more concise in directly addressing the specific claims made in the post.",
+      "keywords_found": [
+        "Musk",
+        "Altman",
+        "OpenAI"
+      ],
+      "keywords_missing": [
+        "lawsuit",
+        "Tesla"
+      ],
+      "bullet_count": 5,
+      "count_ok": true,
+      "bullets": [
+        "Elon Musk co-founded OpenAI in 2015 as a nonprofit organization aimed at promoting safe and open development of artificial intelligence.",
+        "In 2018, Musk left OpenAI after a power struggle with CEO Sam Altman, who subsequently transformed the organization into a for-profit entity, leading to significant commercial success with products like ChatGPT.",
+        "Musk has accused Altman of 'stealing a charity' by prioritizing profit over the nonprofit's original mission, alleging that Altman and others enriched themselves at the expense of the organization's founding principles.",
+        "The ongoing legal battle highlights Musk's claims of betrayal and his desire to reclaim control over OpenAI, reflecting the intense rivalry in the AI sector, particularly as Musk's own AI venture, xAI, struggles to compete.",
+        "This situation is particularly interesting as it underscores the tension between altruistic goals and commercial interests in the rapidly evolving AI industry, raising questions about the ethical implications of such transformations."
+      ],
+      "sources": [
+        "https://www.bbc.com/news/articles/cz027nyz529o",
+        "https://www.nytimes.com/live/2026/04/28/technology/openai-sam-altman-elon-musk-trial",
+        "https://www.theguardian.com/technology/2026/apr/27/elon-musk-sam-altman-open-ai-lawsuit"
+      ]
+    }
+  ]
+}

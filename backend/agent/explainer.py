@@ -58,13 +58,13 @@ def _fetch_image_b64(image_url: str) -> str | None:
         return None
 
 
-def explain_post(post: dict) -> dict:
+def explain_post(post: dict, model: str = "gpt-4o") -> dict:
     if os.getenv("LANGFUSE_SECRET_KEY"):
         from langfuse import observe, get_client
 
         @observe(name="explain-post")
         def _run(post: dict) -> dict:
-            result = _core(post)
+            result = _core(post, model=model)
             get_client().score_current_span(
                 name="bullets_count",
                 value=len(result["bullets"]),
@@ -73,10 +73,10 @@ def explain_post(post: dict) -> dict:
 
         return _run(post)
 
-    return _core(post)
+    return _core(post, model=model)
 
 
-def _core(post: dict) -> dict:
+def _core(post: dict, model: str = "gpt-4o") -> dict:
     try:
         query = build_search_query(post["text"])
         search_results = search_web(query)
@@ -115,7 +115,7 @@ def _core(post: dict) -> dict:
     print("="*60 + "\n")
 
     create_kwargs = dict(
-        model="gpt-4o",
+        model=model,
         messages=messages,
         response_format={
             "type": "json_schema",
