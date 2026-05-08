@@ -113,7 +113,7 @@ def score_case(result: dict, case: dict, use_judge: bool = True) -> dict:
 
 # ── Runner ─────────────────────────────────────────────────────────────────────
 
-def run_eval(cases_path: str = "cases.json", limit: int = None, use_judge: bool = True) -> float:
+def run_eval(cases_path: str = "cases.json", output_path: str = "eval_results.json", limit: int = None, use_judge: bool = True) -> float:
     with open(cases_path) as f:
         cases = json.load(f)
 
@@ -168,7 +168,7 @@ def run_eval(cases_path: str = "cases.json", limit: int = None, use_judge: bool 
     print(f"Overall score: {overall:.2f} | Passed: {passed}/{len(cases)}")
     print(f"{'='*60}\n")
 
-    with open("eval_results.json", "w", encoding="utf-8") as f:
+    with open(output_path, "w", encoding="utf-8") as f:
         json.dump({"overall_score": overall, "passed": passed, "total": len(cases), "cases": results}, f, indent=2, ensure_ascii=False)
 
     return overall
@@ -177,7 +177,9 @@ def run_eval(cases_path: str = "cases.json", limit: int = None, use_judge: bool 
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument("--limit",    type=int,  default=None,  help="Limit number of cases")
-    parser.add_argument("--no-judge", action="store_true",      help="Skip LLM judge (faster)")
+    parser.add_argument("--cases",    type=str,  default="cases.json",        help="Path to cases JSON file")
+    parser.add_argument("--output",   type=str,  default="eval_results.json", help="Path to output JSON file")
+    parser.add_argument("--limit",    type=int,  default=None,                help="Limit number of cases")
+    parser.add_argument("--no-judge", action="store_true",                    help="Skip LLM judge (faster)")
     args = parser.parse_args()
-    run_eval(limit=args.limit, use_judge=not args.no_judge)
+    run_eval(cases_path=args.cases, output_path=args.output, limit=args.limit, use_judge=not args.no_judge)

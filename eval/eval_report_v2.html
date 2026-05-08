@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bluesky Explainer — Eval Report — Batch 2</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #0f1117;
+      color: #e2e8f0;
+      min-height: 100vh;
+      padding: 2rem 1rem;
+    }
+
+    .container { max-width: 900px; margin: 0 auto; }
+
+    header { text-align: center; margin-bottom: 2.5rem; }
+    header h1 { font-size: 1.9rem; font-weight: 700; color: #fff; }
+    header p  { color: #94a3b8; margin-top: .4rem; font-size: .95rem; }
+
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+    }
+    .stat {
+      background: #1e2330;
+      border: 1px solid #2d3748;
+      border-radius: 12px;
+      padding: 1.2rem 1rem;
+      text-align: center;
+    }
+    .stat .value { font-size: 2.2rem; font-weight: 700; line-height: 1; }
+    .stat .label { font-size: .78rem; color: #64748b; margin-top: .4rem; text-transform: uppercase; letter-spacing: .05em; }
+    .stat.green .value { color: #4ade80; }
+    .stat.blue  .value { color: #60a5fa; }
+    .stat.amber .value { color: #fbbf24; }
+
+    .score-bar-wrap { margin-bottom: 2.5rem; }
+    .score-bar-wrap h2 { font-size: .85rem; color: #64748b; text-transform: uppercase; letter-spacing: .06em; margin-bottom: .7rem; }
+    .score-bar-bg {
+      background: #1e2330;
+      border-radius: 999px;
+      height: 12px;
+      overflow: hidden;
+      border: 1px solid #2d3748;
+    }
+    .score-bar-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #3b82f6, #4ade80);
+      transition: width .6s ease;
+    }
+
+    .cases { display: flex; flex-direction: column; gap: 1rem; }
+
+    .card {
+      background: #1e2330;
+      border: 1px solid #2d3748;
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    .card.pass { border-left: 4px solid #4ade80; }
+    .card.fail { border-left: 4px solid #f87171; }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      padding: .9rem 1.2rem;
+      cursor: pointer;
+      user-select: none;
+    }
+    .card-header:hover { background: #252d3f; }
+
+    .badge {
+      font-size: .7rem;
+      font-weight: 700;
+      padding: .2rem .55rem;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      flex-shrink: 0;
+    }
+    .badge.pass { background: #14532d; color: #4ade80; }
+    .badge.fail { background: #450a0a; color: #f87171; }
+
+    .card-id { font-weight: 600; font-size: .95rem; flex: 1; color: #e2e8f0; }
+
+    .score-pill {
+      font-size: .82rem;
+      font-weight: 700;
+      padding: .18rem .6rem;
+      border-radius: 999px;
+      flex-shrink: 0;
+    }
+    .score-pill.high  { background: #14532d33; color: #4ade80; }
+    .score-pill.mid   { background: #78350f33; color: #fbbf24; }
+    .score-pill.low   { background: #450a0a33; color: #f87171; }
+
+    .category-tag {
+      font-size: .7rem;
+      color: #64748b;
+      background: #0f1117;
+      border: 1px solid #2d3748;
+      padding: .15rem .5rem;
+      border-radius: 6px;
+      flex-shrink: 0;
+    }
+
+    .chevron { color: #475569; font-size: .8rem; flex-shrink: 0; transition: transform .2s; }
+    .card.open .chevron { transform: rotate(180deg); }
+
+    .subscores { display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: 1rem; }
+    .subscore {
+      font-size: .72rem; padding: .2rem .6rem; border-radius: 999px;
+      background: #0f1117; border: 1px solid #2d3748; color: #94a3b8;
+    }
+    .subscore span { color: #e2e8f0; font-weight: 600; }
+
+    .judge-block {
+      background: #0f1117; border-radius: 8px; padding: .6rem .9rem;
+      font-size: .83rem; color: #94a3b8; margin-bottom: 1rem;
+      border-left: 3px solid #a78bfa;
+    }
+    .judge-block strong { color: #a78bfa; margin-right: .4rem; }
+
+    .sources-list { list-style: none; display: flex; flex-direction: column; gap: .3rem; margin-bottom: .5rem; }
+    .sources-list li { font-size: .75rem; }
+    .sources-list a { color: #60a5fa; text-decoration: none; word-break: break-all; }
+    .sources-list a:hover { text-decoration: underline; }
+
+    .card-body { display: none; padding: 0 1.2rem 1.2rem; }
+    .card.open .card-body { display: block; }
+
+    .post-quote {
+      background: #0f1117;
+      border-left: 3px solid #3b82f6;
+      border-radius: 0 8px 8px 0;
+      padding: .6rem .9rem;
+      font-size: .85rem;
+      color: #94a3b8;
+      margin-bottom: 1rem;
+      font-style: italic;
+    }
+
+    .section-label {
+      font-size: .72rem;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      color: #475569;
+      margin-bottom: .5rem;
+    }
+
+    .bullets { list-style: none; display: flex; flex-direction: column; gap: .6rem; margin-bottom: 1rem; }
+    .bullets li {
+      background: #0f1117;
+      border-radius: 8px;
+      padding: .55rem .8rem;
+      font-size: .84rem;
+      line-height: 1.55;
+      color: #cbd5e1;
+      display: flex;
+      gap: .6rem;
+    }
+    .bullet-num {
+      background: #1e3a5f;
+      color: #60a5fa;
+      font-size: .68rem;
+      font-weight: 700;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .kw-row { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: 1rem; }
+    .kw {
+      font-size: .72rem;
+      padding: .2rem .55rem;
+      border-radius: 999px;
+      font-weight: 600;
+    }
+    .kw.found   { background: #14532d33; color: #4ade80; border: 1px solid #166534; }
+    .kw.missing { background: #450a0a33; color: #f87171; border: 1px solid #7f1d1d; }
+
+    .divider { border: none; border-top: 1px solid #2d3748; margin: .8rem 0; }
+
+    footer { text-align: center; margin-top: 3rem; color: #334155; font-size: .8rem; }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <h1>Bluesky Post Explainer — Eval Report — Batch 2</h1>
+    <p>GPT-4o · DuckDuckGo search · 12 new posts (space, tech, finance, F1, entertainment, health, environment, politics, geopolitics, business, viral, science) · scored 2026-05-08</p>
+  </header>
+
+  <div class="summary">
+    <div class="stat green">
+      <div class="value">0.94</div>
+      <div class="label">Overall score</div>
+    </div>
+    <div class="stat blue">
+      <div class="value">12/12</div>
+      <div class="label">Cases passed</div>
+    </div>
+    <div class="stat amber">
+      <div class="value">0.60</div>
+      <div class="label">Pass threshold</div>
+    </div>
+  </div>
+
+  <div class="score-bar-wrap">
+    <h2>Overall score</h2>
+    <div class="score-bar-bg">
+      <div class="score-bar-fill" style="width: 94%"></div>
+    </div>
+  </div>
+
+  <div class="cases" id="cases"></div>
+
+  <footer>Generated by the eval harness · Bluesky Post Explainer · Batch 2</footer>
+</div>
+
+<script>
+const CATEGORIES = {
+  "artemis-ii-launch":            "space",
+  "x-india-content-takedown":     "tech",
+  "blackrock-shorter-bets":       "finance",
+  "f1-piastri-verstappen-brazil": "sports",
+  "chappell-roan-the-giver":      "entertainment",
+  "hhs-cyber-collapse":           "health",
+  "ocean-acidity-planetary-boundary": "environment",
+  "lisa-cook-fed-trump":          "politics",
+  "japan-china-taiwan-military":  "geopolitics",
+  "ken-griffin-trade-war":        "business",
+  "tony-hawk-viral-humor":        "viral",
+  "lysosomes-neurodegeneration":  "science",
+};
+
+const POST_TEXTS = {
+  "artemis-ii-launch":            "LAUNCH! ARTEMIS II LAUNCHES WITH A CREW OF 4 TOWARDS THE MOON",
+  "x-india-content-takedown":     "X said last week's Indian court ruling allows millions of police officers to issue \"arbitrary\" content takedown orders.",
+  "blackrock-shorter-bets":       "BlackRock eyes shorter-term bets amid shaky global economic foundations",
+  "f1-piastri-verstappen-brazil": "As Piastri crashed in front of him on lap six, Verstappen came this close to joining him as he caught a skid in the exact same spot with a huge snap of opposite lock. #F1 #BrazilianGP",
+  "chappell-roan-the-giver":      "Chappell Roan: The Giver review – saddle up, there's a new sheriff in town",
+  "hhs-cyber-collapse":           "SCOOP: Much of the IT and cybersecurity infrastructure underpinning the US health system is in danger of a possible collapse following a purge of IT staff and leadership at HHS.",
+  "ocean-acidity-planetary-boundary": "World's oceans fail key health check as acidity crosses critical threshold for marine life. Seven of nine planetary boundaries now transgressed.",
+  "lisa-cook-fed-trump":          "BREAKING: A federal court rules that Federal Reserve Governor Lisa Cook can remain in her position while she fights President Donald Trump's efforts to fire her.",
+  "japan-china-taiwan-military":  "Japanese divided on military response to China over Taiwan, Kyodo poll shows",
+  "ken-griffin-trade-war":        "Citadel founder Ken Griffin said President Donald Trump's trade war has derailed business leaders' plans to spend the next four years focusing on growth.",
+  "tony-hawk-viral-humor":        "Me if I ever see Tony Hawk: Hey you're Tony Hawk the famous skateboarder. That's right I recognise you. Won't be able to get any content out of this will you, you piece of shit",
+  "lysosomes-neurodegeneration":  "New discoveries are reshaping how scientists understand the molecular connections between the extracellular matrix and lysosomes—and the resulting implications for research and therapeutics for neurodegenerative disorders.",
+};
+
+const data = {"overall_score":0.9425,"passed":12,"total":12,"cases":[{"id":"artemis-ii-launch","score":1.0,"keyword_score":1.0,"count_score":1.0,"judge_score":1.0,"judge_reasoning":"The explanation accurately details the Artemis II mission, its crew, objectives, and significance, directly addressing the content of the post.","keywords_found":["Artemis","Moon","NASA","crew","lunar"],"keywords_missing":[],"bullet_count":4,"count_ok":true,"bullets":["Artemis II is NASA's first crewed mission in the Artemis program, following the uncrewed Artemis I mission. It aims to test the Space Launch System (SLS) rocket and Orion spacecraft in deep space, paving the way for future lunar exploration and eventual missions to Mars.","The mission involves a crew of four astronauts: Reid Wiseman, Victor Glover, Christina Koch, and Jeremy Hansen. They will embark on a 10-day journey around the Moon, testing life-support and navigation systems.","The post celebrates the launch of Artemis II, marking a significant milestone in human space exploration as it sends astronauts on a lunar flyby — a step towards returning humans to the Moon.","This mission is particularly noteworthy for its diverse crew, including the first woman and first person of color to travel beyond low Earth orbit, as well as the first non-U.S. citizen."],"sources":["https://www.asc-csa.gc.ca/eng/missions/artemis-ii/mission.asp","https://www.nasa.gov/feature/our-artemis-crew/","https://en.wikipedia.org/wiki/Artemis_II"]},{"id":"x-india-content-takedown","score":1.0,"keyword_score":1.0,"count_score":1.0,"judge_score":1.0,"judge_reasoning":"The explanation accurately describes the court ruling, its implications for police authority regarding content takedown orders, and addresses the concerns raised by X, making it highly relevant to the post.","keywords_found":["X","India","court","content","takedown"],"keywords_missing":[],"bullet_count":4,"count_ok":true,"bullets":["The Karnataka High Court in India upheld a ruling allowing police officers to issue content takedown orders through an online portal called Sahyog. X (formerly Twitter) calls this a 'censorship portal' enabling mass content removal without judicial oversight.","X is appealing the decision, arguing it permits 'arbitrary' takedown orders issuable by millions of police officers, circumventing safeguards under Section 69A of the IT Act which requires judicial review.","The ruling highlights ongoing tensions between social media platforms and the Indian government over content moderation, with X citing concerns over free expression and politically motivated censorship.","This underscores the global debate about balancing government oversight with free speech on digital platforms, and could set a precedent for how other countries regulate online content."],"sources":["https://techcrunch.com/2025/09/29/x-says-will-fight-indian-court-ruling-on-content-takedown-system/","https://www.engadget.com/social-media/x-will-appeal-indian-court-ruling-allowing-arbitrary-takedown-orders-120000846.html"]},{"id":"blackrock-shorter-bets","score":0.9,"keyword_score":0.8,"count_score":1.0,"judge_score":1.0,"judge_reasoning":"The explanation accurately reflects BlackRock's investment strategy shift due to economic uncertainty and provides relevant context.","keywords_found":["BlackRock","investment","short-term","global"],"keywords_missing":["economy"],"bullet_count":4,"count_ok":true,"bullets":["BlackRock, the world's largest asset manager, is shifting towards shorter-term bets due to increased global economic uncertainty, driven by unpredictability of long-term trends and the need for frequent reassessment.","The BlackRock Investment Institute highlights that persistent inflation and geopolitical tensions make short-term investments more attractive, with a six-to-twelve month horizon offering more certainty.","In context, BlackRock's pivot to shorter-term bets reflects a strategic response to volatility, prioritizing short-term bonds and assets less exposed to interest rate risk.","This illustrates how even large financial institutions must adapt their strategies to global economic challenges, underscoring broader market caution and the need for agility."],"sources":["https://www.blackrock.com/us/individual/podcasts/the-bid/global-outlook","https://www.reuters.com/sustainability/boards-policy-regulation/blackrock-urges-investors-spread-hedge-fund-bets-amid-market-swings-2026-04-15"]},{"id":"f1-piastri-verstappen-brazil","score":0.9,"keyword_score":0.8,"count_score":1.0,"judge_score":1.0,"judge_reasoning":"The explanation accurately describes the incident involving Verstappen and Piastri during the Brazilian GP, providing relevant context and details.","keywords_found":["Piastri","Verstappen","Brazil","crash"],"keywords_missing":["F1"],"bullet_count":4,"count_ok":true,"bullets":["Oscar Piastri, driving for McLaren, crashed on lap six of the 2025 Brazilian Grand Prix. Max Verstappen (Red Bull) narrowly avoided the same fate in the exact same spot moments later with a dramatic counter-steer.","Verstappen's 'huge snap of opposite lock' caught the car as it began to slide over the same patch of track that caught Piastri — a testament to his reflexes and car control under pressure.","The incident highlights the fine margins in Formula 1 racing, where identical track conditions can produce completely different outcomes depending on driver reaction time.","The Brazilian GP is historically one of the most dramatic races on the F1 calendar, and incidents like this underscore why Interlagos remains a fan favorite."],"sources":["https://x.com/racefansdotnet/status/1987196239146819793","https://www.reddit.com/r/formula1/comments/1oru7vv/racefans_as_piastri_crashed_in_front_of_him_on/"]},{"id":"chappell-roan-the-giver","score":0.9,"keyword_score":0.8,"count_score":1.0,"judge_score":1.0,"judge_reasoning":"The explanation accurately describes Chappell Roan's background, the song, and effectively connects the post's metaphor to her impact on the country music scene.","keywords_found":["Chappell Roan","The Giver","review","music"],"keywords_missing":["album"],"bullet_count":4,"count_ok":true,"bullets":["Chappell Roan is a pop artist known for her theatrical style, often incorporating elements of drag and camp. 'The Giver' is a country song featuring queer themes, specifically highlighting lesbian relationships, debuted on Saturday Night Live.","The Guardian review describes 'The Giver' as a 'gay-as-hell country song' — a departure from her usual pop style, incorporating traditional country elements like fiddle solos and connecting to her Midwestern roots.","The phrase 'saddle up, there's a new sheriff in town' humorously frames Roan as a bold, confident newcomer challenging traditional norms in country music.","The song is seen as a playful and significant entry into the country genre, building on Roan's breakout 2024 success and demonstrating her range as an artist."],"sources":["https://www.theguardian.com/music/2025/mar/14/chappell-roan-the-giver-review-sapphic-country","https://pitchfork.com/reviews/tracks/chappell-roan-the-giver/"]},{"id":"hhs-cyber-collapse","score":1.0,"keyword_score":1.0,"count_score":1.0,"judge_score":1.0,"judge_reasoning":"The explanation accurately reflects the concerns about HHS IT and cybersecurity infrastructure collapse due to staff purges, providing relevant context and sources.","keywords_found":["HHS","cybersecurity","health","IT","DOGE"],"keywords_missing":[],"bullet_count":4,"count_ok":true,"bullets":["The Department of Health and Human Services (HHS) is facing a potential collapse of its IT and cybersecurity infrastructure following a major reduction in force purging many IT staff and leadership, raising concerns about the security of health records for millions of Americans.","The layoffs are part of broader DOGE-driven cuts affecting thousands of staff across federal health agencies including the FDA, criticized as unprecedented and potentially harmful to public health and biomedical research.","The post by WIRED highlights the urgency of the situation, emphasizing vulnerability of critical health IT systems and the potential for a cybersecurity crisis affecting public health services.","This is particularly concerning given the reliance on these systems for managing vast amounts of sensitive health data, with potential disruptions threatening both data security and continuity of public health programs."],"sources":["https://www.wired.com/story/department-health-human-services-possible-collapse/","https://www.npr.org/sections/shots-health-news/2025/04/01/g-s1-57485/hhs-fda-layoffs-doge-cdc-nih"]},{"id":"ocean-acidity-planetary-boundary","score":1.0,"keyword_score":1.0,"count_score":1.0,"judge_score":1.0,"judge_reasoning":"The explanation accurately describes ocean acidification, its causes, the significance of the critical threshold crossed, and the implications for marine life.","keywords_found":["ocean","acidity","planetary","marine","fossil fuels"],"keywords_missing":[],"bullet_count":4,"count_ok":true,"bullets":["Ocean acidification occurs when the ocean absorbs atmospheric CO₂ from burning fossil fuels, forming carbonic acid and reducing the availability of calcium carbonate needed by marine organisms for their shells and skeletons.","A Potsdam Institute report confirms ocean acidity has crossed a critical threshold, making it the seventh of nine planetary boundaries breached — signaling significant risk to marine ecosystems and urgent need to reduce fossil fuel consumption.","The post highlights the alarming state of the world's oceans, emphasizing the need for immediate global action to protect marine life and maintain Earth's habitability.","Oceans play a crucial role in stabilizing the global climate; increased acidity threatens marine biodiversity, food security, and the entire marine food chain — with broad implications for human well-being."],"sources":["https://www.theguardian.com/environment/2025/sep/24/worlds-oceans-fail-key-health-check-as-acidity-crosses-critical-threshold-for-marine-life","https://www.pik-potsdam.de/en/news/latest-news/seven-of-nine-planetary-boundaries-now-breached-2013-ocean-acidification-joins-the-danger-zone"]},{"id":"lisa-cook-fed-trump","score":0.97,"keyword_score":1.0,"count_score":1.0,"judge_score":0.9,"judge_reasoning":"The explanation accurately describes the court ruling and its implications, while providing relevant context about Lisa Cook's appointment and the legal battle.","keywords_found":["Lisa Cook","Federal Reserve","Trump","court","governor"],"keywords_missing":[],"bullet_count":4,"count_ok":true,"bullets":["Lisa Cook is a Federal Reserve Governor appointed in 2022, with her current term running to 2038. She is fighting President Donald Trump's attempt to remove her, citing allegations of mortgage fraud as justification for dismissal.","A federal court ruled Cook can remain in her position while she challenges her firing. The court found Trump's reasons did not meet the 'for cause' requirement under the Federal Reserve Act, which protects the Fed's independence.","The ruling underscores the importance of maintaining Federal Reserve independence from political pressure — a principle crucial for ensuring stable, non-partisan economic policy-making.","This highlights the tension between the executive branch and independent federal agencies. The outcome could set precedent for how much influence a president can exert over the Fed."],"sources":["https://www.cbsnews.com/news/lisa-cook-firing-blocked-federal-judge/","https://www.pbs.org/newshour/politics/cook-can-remain-a-fed-governor-while-fighting-trumps-attempted-firing-court-rules","https://www.npr.org/2025/09/15/nx-s1-5539252/lisa-cook-fed-trump-firing-court"]},{"id":"japan-china-taiwan-military","score":1.0,"keyword_score":1.0,"count_score":1.0,"judge_score":1.0,"judge_reasoning":"The explanation accurately summarizes the poll results and contextualizes public opinion regarding Japan's military response to China, directly addressing the post.","keywords_found":["Japan","China","Taiwan","military","poll"],"keywords_missing":[],"bullet_count":4,"count_ok":true,"bullets":["A Kyodo News poll showed the Japanese public is nearly evenly split on whether Japan should engage militarily if China attacks Taiwan: 48.8% in favor vs. 44.2% against, reflecting deep concerns about regional security.","The poll also showed support for PM Sanae Takaichi's plan to raise defense spending to 2% of GDP, indicating a significant portion of the population favors strengthening military capabilities.","Takaichi's remarks that a Chinese attack on Taiwan could be a 'survival-threatening situation' for Japan prompted diplomatic friction and Chinese warnings against citizens traveling to Japan.","The findings reflect Japan's internal debate over its post-WWII pacifist stance and the pressures to adapt to new geopolitical realities — a key shift in Japan's security policy with implications for regional stability."],"sources":["https://www.reuters.com/world/china/japanese-divided-military-response-china-over-taiwan-kyodo-poll-shows-2025-11-16/","https://www.straitstimes.com/asia/east-asia/japanese-divided-on-military-response-to-china-over-taiwan-kyodo-poll-shows"]},{"id":"ken-griffin-trade-war","score":0.97,"keyword_score":1.0,"count_score":1.0,"judge_score":0.9,"judge_reasoning":"The explanation accurately reflects Ken Griffin's criticism of Trump's trade policies and their impact on business growth, while addressing broader implications.","keywords_found":["Ken Griffin","Citadel","Trump","trade war","business"],"keywords_missing":[],"bullet_count":5,"count_ok":true,"bullets":["Ken Griffin, founder of Citadel, criticized Trump's trade policies as having devolved into a 'nonsensical place,' forcing businesses to focus on supply chain issues rather than growth and expansion plans.","Griffin warned Trump's tariffs could tarnish the reputation of U.S. financial markets and the U.S.'s position as a stable investment environment, undermining global confidence.","The tariffs — including levies on steel and aluminum — create economic uncertainty and are seen as counterproductive to boosting American manufacturing, discouraging long-term investment.","Griffin's comments reflect broader concerns among business leaders about increased costs, recession risk, and policy volatility making it harder to plan multi-year growth strategies.","The post illustrates the tension between political trade decisions and economic growth, showing how policy unpredictability can have far-reaching impacts on business confidence."],"sources":["https://fortune.com/article/ken-griffin-trumps-trade-war-nonsensical/","https://www.cnbc.com/2025/04/23/citadels-ken-griffin-warns-trump-about-tarnishing-the-brand-of-us-treasurys.html","https://www.nbcnews.com/business/business-news/trump-tariffs-business-leaders-criticize-trump-admin-trade-war-rcna199997"]},{"id":"tony-hawk-viral-humor","score":0.77,"keyword_score":0.6,"count_score":1.0,"judge_score":0.9,"judge_reasoning":"The explanation accurately captures the humor and context of the post while effectively relating it to Tony Hawk's well-known experiences with recognition.","keywords_found":["Tony Hawk","skateboarder","humor"],"keywords_missing":["content creator","viral"],"bullet_count":5,"count_ok":true,"bullets":["Tony Hawk is a legendary professional skateboarder widely known for the 'Tony Hawk's Pro Skater' video game series. Despite his fame, he frequently posts humorous anecdotes about people not recognizing him in public.","The post humorously imagines an encounter with Hawk, referencing the real-life pattern where fans recognize him but expect something memorable or 'content-worthy' out of the meeting.","The joke plays on the irony of celebrity: Hawk is famous enough to be recognized, yet the recognition itself is mundane enough that there's 'nothing to film' — a commentary on social media culture.","The humor lands because of the contrast between the expected celebrity encounter and the deflating reality, plus the absurdly direct way the fictional speaker turns antagonistic.","Hawk's recurring stories about awkward public recognition have themselves become a viral phenomenon, making this post a meta-commentary on internet culture and content creation."],"sources":["https://www.surfertoday.com/skateboarding/the-ultimate-compilation-of-tony-hawk-hilarious-daily-encounters","https://www.buzzfeed.com/mjs538/tony-hawk-awkward-interactions"]},{"id":"lysosomes-neurodegeneration","score":0.9,"keyword_score":0.8,"count_score":1.0,"judge_score":1.0,"judge_reasoning":"The explanation accurately describes the roles of the extracellular matrix and lysosomes, their interaction, and implications for neurodegenerative disorders.","keywords_found":["lysosomes","extracellular matrix","neurodegenerative","molecular"],"keywords_missing":["therapeutics"],"bullet_count":4,"count_ok":true,"bullets":["The extracellular matrix (ECM) provides structural support and regulates cellular communication. Lysosomes are organelles responsible for recycling cellular waste and signal transduction — both are crucial for cellular health.","Recent research in Science Signaling highlights a bidirectional interaction between the ECM and lysosomes. Disruptions in this interaction can affect progression of neurodegenerative diseases like Alzheimer's and Parkinson's.","The post references a review that discusses these discoveries, emphasizing their potential to open new avenues for developing therapies targeting molecular pathways in ECM-lysosome interactions.","This is significant because it suggests that manipulating these pathways could lead to breakthroughs in treating complex neurodegenerative disorders that currently have limited treatment options."],"sources":["https://pubmed.ncbi.nlm.nih.gov/40493673/","https://www.science.org/doi/10.1126/scisignal.adt1936"]}]};
+
+function scoreClass(s) {
+  if (s >= 0.85) return "high";
+  if (s >= 0.65) return "mid";
+  return "low";
+}
+
+const container = document.getElementById("cases");
+
+data.cases.forEach(c => {
+  const pass = c.score >= 0.6;
+  const card = document.createElement("div");
+  card.className = `card ${pass ? "pass" : "fail"}`;
+
+  card.innerHTML = `
+    <div class="card-header" onclick="this.closest('.card').classList.toggle('open')">
+      <span class="badge ${pass ? 'pass' : 'fail'}">${pass ? "PASS" : "FAIL"}</span>
+      <span class="card-id">${c.id}</span>
+      <span class="category-tag">${CATEGORIES[c.id] || ""}</span>
+      <span class="score-pill ${scoreClass(c.score)}">${c.score.toFixed(2)}</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="card-body">
+      <p class="post-quote">"${POST_TEXTS[c.id] || ""}"</p>
+
+      <div class="subscores">
+        <span class="subscore">keywords <span>${(c.keyword_score * 100).toFixed(0)}%</span></span>
+        <span class="subscore">bullet count <span>${c.count_ok ? "✓" : "✗"} ${c.bullet_count}</span></span>
+        ${c.judge_score !== null && c.judge_score !== undefined ? `<span class="subscore">judge <span>${(c.judge_score * 10).toFixed(0)}/10</span></span>` : ""}
+      </div>
+
+      ${c.judge_reasoning ? `<div class="judge-block"><strong>Judge:</strong>${c.judge_reasoning}</div>` : ""}
+
+      <p class="section-label">Keywords</p>
+      <div class="kw-row">
+        ${c.keywords_found.map(k => `<span class="kw found">✓ ${k}</span>`).join("")}
+        ${c.keywords_missing.map(k => `<span class="kw missing">✗ ${k}</span>`).join("")}
+      </div>
+
+      <hr class="divider" />
+
+      <p class="section-label">Bullets (${c.bullet_count})</p>
+      <ul class="bullets">
+        ${c.bullets.map((b, i) => `
+          <li>
+            <span class="bullet-num">${i + 1}</span>
+            <span>${b}</span>
+          </li>`).join("")}
+      </ul>
+
+      ${c.sources && c.sources.length ? `
+        <hr class="divider" />
+        <p class="section-label">Sources</p>
+        <ul class="sources-list">
+          ${c.sources.map(s => `<li><a href="${s}" target="_blank" rel="noopener">${s}</a></li>`).join("")}
+        </ul>` : ""}
+    </div>
+  `;
+
+  container.appendChild(card);
+});
+</script>
+</body>
+</html>

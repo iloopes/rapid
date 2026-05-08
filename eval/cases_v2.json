@@ -1,0 +1,110 @@
+[
+  {
+    "id": "artemis-ii-launch",
+    "url": "https://bsky.app/profile/nasaspaceflight.com/post/3mihr2jadek2r",
+    "post_text": "LAUNCH! ARTEMIS II LAUNCHES WITH A CREW OF 4 TOWARDS THE MOON",
+    "expected_keywords": ["Artemis", "Moon", "NASA", "crew", "lunar"],
+    "expected_bullet_count_min": 3,
+    "expected_bullet_count_max": 5,
+    "category": "space"
+  },
+  {
+    "id": "x-india-content-takedown",
+    "url": "https://bsky.app/profile/techcrunch.com/post/3lzxvzviiap2k",
+    "post_text": "X said last week's Indian court ruling allows millions of police officers to issue \"arbitrary\" content takedown orders.",
+    "expected_keywords": ["X", "India", "court", "content", "takedown"],
+    "expected_bullet_count_min": 3,
+    "expected_bullet_count_max": 5,
+    "category": "tech"
+  },
+  {
+    "id": "blackrock-shorter-bets",
+    "url": "https://bsky.app/profile/reuters.com/post/3lsvkrzyygr2z",
+    "post_text": "BlackRock eyes shorter-term bets amid shaky global economic foundations",
+    "expected_keywords": ["BlackRock", "investment", "economy", "short-term", "global"],
+    "expected_bullet_count_min": 3,
+    "expected_bullet_count_max": 5,
+    "category": "finance"
+  },
+  {
+    "id": "f1-piastri-verstappen-brazil",
+    "url": "https://bsky.app/profile/racefans.net/post/3m54zdy5fmc22",
+    "post_text": "As Piastri crashed in front of him on lap six, Verstappen came this close to joining him as he caught a skid in the exact same spot with a huge snap of opposite lock. #F1 #BrazilianGP #RaceFans",
+    "expected_keywords": ["Piastri", "Verstappen", "F1", "Brazil", "crash"],
+    "expected_bullet_count_min": 3,
+    "expected_bullet_count_max": 5,
+    "category": "sports"
+  },
+  {
+    "id": "chappell-roan-the-giver",
+    "url": "https://bsky.app/profile/theguardian.com/post/3lkfmhuqbxo22",
+    "post_text": "Chappell Roan: The Giver review – saddle up, there's a new sheriff in town",
+    "expected_keywords": ["Chappell Roan", "The Giver", "album", "review", "music"],
+    "expected_bullet_count_min": 3,
+    "expected_bullet_count_max": 5,
+    "category": "entertainment"
+  },
+  {
+    "id": "hhs-cyber-collapse",
+    "url": "https://bsky.app/profile/wired.com/post/3lmru7djbes2g",
+    "post_text": "SCOOP: Much of the IT and cybersecurity infrastructure underpinning the US health system is in danger of a possible collapse following a purge of IT staff and leadership at the Department of Health and Human Services (HHS).",
+    "expected_keywords": ["HHS", "cybersecurity", "health", "IT", "DOGE"],
+    "expected_bullet_count_min": 3,
+    "expected_bullet_count_max": 5,
+    "category": "health"
+  },
+  {
+    "id": "ocean-acidity-planetary-boundary",
+    "url": "https://bsky.app/profile/guardian-climate.bsky.social/post/3lzluqnz4nk2m",
+    "post_text": "World's oceans fail key health check as acidity crosses critical threshold for marine life: Scientists call for renewed global effort to curb fossil fuels as seven of nine planetary boundaries now transgressed.",
+    "expected_keywords": ["ocean", "acidity", "planetary", "marine", "fossil fuels"],
+    "expected_bullet_count_min": 3,
+    "expected_bullet_count_max": 5,
+    "category": "environment"
+  },
+  {
+    "id": "lisa-cook-fed-trump",
+    "url": "https://bsky.app/profile/apnews.com/post/3lyh5zr67k32l",
+    "post_text": "BREAKING: A federal court rules that Federal Reserve Governor Lisa Cook can remain in her position while she fights President Donald Trump's efforts to fire her.",
+    "expected_keywords": ["Lisa Cook", "Federal Reserve", "Trump", "court", "governor"],
+    "expected_bullet_count_min": 3,
+    "expected_bullet_count_max": 5,
+    "category": "politics"
+  },
+  {
+    "id": "japan-china-taiwan-military",
+    "url": "https://bsky.app/profile/reuters.com/post/3m5qe5jpstg2o",
+    "post_text": "Japanese divided on military response to China over Taiwan, Kyodo poll shows",
+    "expected_keywords": ["Japan", "China", "Taiwan", "military", "poll"],
+    "expected_bullet_count_min": 3,
+    "expected_bullet_count_max": 5,
+    "category": "geopolitics"
+  },
+  {
+    "id": "ken-griffin-trade-war",
+    "url": "https://bsky.app/profile/bloomberg.com/post/3lnj22u37xh2w",
+    "post_text": "Citadel founder Ken Griffin said President Donald Trump's trade war has derailed business leaders' plans to spend the next four years focusing on growth.",
+    "expected_keywords": ["Ken Griffin", "Citadel", "Trump", "trade war", "business"],
+    "expected_bullet_count_min": 3,
+    "expected_bullet_count_max": 5,
+    "category": "business"
+  },
+  {
+    "id": "tony-hawk-viral-humor",
+    "url": "https://bsky.app/profile/pixelatedboat.bsky.social/post/3lpdkaezhyc2j",
+    "post_text": "Me if I ever see Tony Hawk: Hey you're Tony Hawk the famous skateboarder. That's right I recognise you. Won't be able to get any content out of this will you, you piece of shit",
+    "expected_keywords": ["Tony Hawk", "skateboarder", "content creator", "viral", "humor"],
+    "expected_bullet_count_min": 3,
+    "expected_bullet_count_max": 5,
+    "category": "viral"
+  },
+  {
+    "id": "lysosomes-neurodegeneration",
+    "url": "https://bsky.app/profile/science.org/post/3mbhbzrb5j22z",
+    "post_text": "New discoveries are reshaping how scientists understand the molecular connections between the extracellular matrix and lysosomes—and the resulting implications for research and therapeutics for neurodegenerative disorders.",
+    "expected_keywords": ["lysosomes", "extracellular matrix", "neurodegenerative", "therapeutics", "molecular"],
+    "expected_bullet_count_min": 3,
+    "expected_bullet_count_max": 5,
+    "category": "science"
+  }
+]
